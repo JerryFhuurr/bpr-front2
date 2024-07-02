@@ -13,6 +13,11 @@
         -->
 
     <item
+        android:id="@id/teacherFragment"
+        android:icon="@drawable/school_28"
+        android:title="@string/user_item_teacher1" />
+
+    <item
         android:id="@id/userFragment"
         android:icon="@drawable/settings_icon"
         android:title="@string/user_title" />

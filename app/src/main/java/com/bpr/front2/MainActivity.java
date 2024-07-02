@@ -76,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
             //else if (id == R.id.myFragment) {
             //    bottomNavigationView.setVisibility(View.VISIBLE);
             //    SoundHandler.playSoundClick();
-             else if (id == R.id.userFragment) {
+            else if (id == R.id.teacherFragment) {
+                bottomNavigationView.setVisibility(View.VISIBLE);
+            } else if (id == R.id.userFragment) {
                 bottomNavigationView.setVisibility(View.GONE);
             }
         }));

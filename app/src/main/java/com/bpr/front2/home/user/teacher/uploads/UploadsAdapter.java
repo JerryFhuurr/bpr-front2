@@ -1,0 +1,55 @@
+package com.bpr.front2.home.user.teacher.uploads;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bpr.front2.R;
+
+import java.util.ArrayList;
+
+public class UploadsAdapter extends RecyclerView.Adapter<UploadsAdapter.ViewHolder>{
+    private ArrayList<UploadItem> items;
+
+    public UploadsAdapter(ArrayList<UploadItem> items) {
+        this.items = items;
+    }
+
+    @NonNull
+    @Override
+    public UploadsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.fragment_upload_item, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull UploadsAdapter.ViewHolder holder, int position) {
+        holder.mView.setText(items.get(position).title);
+    }
+
+    public void addItem(ArrayList<UploadItem> list){
+        list.addAll(items);
+        items.clear();
+        items.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView mView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView.findViewById(R.id.upload_item_title);
+        }
+    }
+}

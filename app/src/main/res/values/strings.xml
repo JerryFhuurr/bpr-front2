@@ -6,7 +6,7 @@
     <!-- main -->
     <string name="main_login_info">Please login first</string>
     <string name="main_info">Welcome! </string>
-    <string name="no_image_error_label">No images :-(</string>
+    <string name="no_authority">Only teachers can access this page :-(</string>
     <!-- login -->
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
@@ -61,6 +61,7 @@
     <string name="user_item3">General</string>
     <string name="user_item4">Logout</string>
     <string name="user_item5">Exit</string>
+    <string name="user_item_teacher1">Teacher</string>
 
     <!-- account -->
     <string name="account_update_username">Username :</string>
@@ -123,21 +124,8 @@
     <string name="upload_waiting_dialog_title">Uploading</string>
     <string name="upload_waiting_dialog_message">Please wait</string>
 
-    <!-- home -->
-    <string name="tab_1">Anime</string>
-    <string name="tab_2">Meme</string>
-    <string name="tab_3">Game</string>
-
-    <!-- image zoom -->
-    <string name="zoom_image_name">Name :</string>
-    <string name="zoom_image_cat">Category :</string>
-    <string name="zoom_save_ok">Saved !</string>
-    <string name="zoom_share_ok">Link copied to the clipboard !</string>
-    <string name="zoom_delete">Delete image</string>
-    <string name="zoom_delete_ok">Image delete !</string>
-
-    <string name="zoom_dialog_title">Delete</string>
-    <string name="zoom_dialog_message">This operation is irreversible. Are you sure you want to delete this image?</string>
+    <string name="upload_edit">Edit</string>
+    <string name="upload_delete">Remove</string>
 
     <!-- pop menu -->
     <string name="pop_save">Save image</string>
@@ -150,10 +138,9 @@
     <string name="cache_OK">Cache cleaned.</string>
 
     <!-- mine -->
-    <string name="my_title">My uploads</string>
-    <string name="see_all_label">See All</string>
-    <string name="mine_welcome">Welcome back !</string>
-    <string name="mine_tab_1">#Anime</string>
-    <string name="mine_tab_2">#Meme</string>
-    <string name="mine_tab_3">#Game</string>
+    <string name="manage_admin_label">Manage accounts(Only for admin)</string>
+    <string name="manage_button_label">Open</string>
+    <string name="upload_label">Upload new resources</string>
+
+
 </resources>

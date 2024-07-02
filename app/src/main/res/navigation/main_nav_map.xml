@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_userFragment"
             app:destination="@id/userFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_teacherFragment"
+            app:destination="@id/teacherFragment" />
     </fragment>
     <fragment
         android:id="@+id/userFragment"
@@ -46,5 +49,14 @@
         <action
             android:id="@+id/action_aboutFragment_to_userFragment"
             app:destination="@id/userFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherFragment"
+        android:name="com.bpr.front2.home.user.teacher.TeacherFragment"
+        android:label="@string/user_item_teacher1"
+        tools:layout="@layout/fragment_teacher" >
+        <action
+            android:id="@+id/action_teacherFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
