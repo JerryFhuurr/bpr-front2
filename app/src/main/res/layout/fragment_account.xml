@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home.user.AccountFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/account_icon"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/account_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.06" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/account_icon">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:gravity="center|left"
+                    android:text="@string/account_update_username"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/accountName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:gravity="center|left"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:text="Loading..."
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:gravity="center|left"
+                    android:text="@string/account_update_email_text"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/emailEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:gravity="center|left"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:text="Loading..."
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:gravity="center|left"
+                    android:text="@string/account_update_phone_text"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/phoneEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:gravity="center|left"
+                    android:singleLine="true"
+                    android:text="Loading..."
+                    android:textSize="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:gravity="center|left"
+                    android:text="@string/account_update_birth_text"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/birthdayText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.5"
+                    android:gravity="center|left"
+                    android:singleLine="true"
+                    android:text="Loading..."
+                    android:textSize="20dp" />
+
+                <Button
+                    android:id="@+id/account_change_birthday"
+                    style="@style/edit_button_style"
+                    android:layout_weight="5"
+                    android:drawableLeft="@drawable/edit_icon"
+                    android:onClick="updateBirth" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="18dp" />
+
+            <Button
+                android:id="@+id/update_info"
+                style="@style/edit_button_password_style"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/account_save_text"
+                android:onClick="saveChanges" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="18dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp">
+
+                <TextView
+                    android:id="@+id/changePasswordLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center|left"
+                    android:text="@string/account_update_password_text"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/change_password"
+                    style="@style/edit_button_password_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="updatePassword"
+                    android:text="@string/account_update_password" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

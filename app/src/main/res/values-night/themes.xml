@@ -1,0 +1,61 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Front2" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.Front2.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- button style in user fragment -->
+    <style name="user_button_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@color/WhiteSmoke</item>
+        <item name="android:gravity">center|left</item>
+        <item name="android:backgroundTint">@color/Grey</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="edit_button_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:backgroundTint">@color/lightSkyBlue</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="edit_button_password_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">@color/WhiteSmoke</item>
+        <item name="android:backgroundTint">@color/deepSkyBlue3</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="single_zoom_style">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="single_zoom_content_style">
+        <item name="android:background">@color/grey21</item>
+    </style>
+
+    <style name="filter_button_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+    </style>
+</resources>

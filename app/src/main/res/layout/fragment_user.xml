@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home.user.UserFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_header_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/user_userIcon"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="36dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="192dp"
+                android:layout_height="54dp"
+                android:layout_marginStart="20dp"
+                android:text="Loading..."
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/user_userIcon"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/user_header_container">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/user_account"
+                    style="@style/user_button_style"
+                    android:text="@string/user_item1"
+                    android:drawableLeft="@drawable/account_icon"
+                    android:drawableRight="@drawable/next_icon" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp" />
+
+                <Button
+                    android:id="@+id/user_settings"
+                    style="@style/user_button_style"
+                    android:text="@string/user_item3"
+                    android:drawableLeft="@drawable/settings_icon"
+                    android:drawableRight="@drawable/next_icon" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp" />
+
+                <Button
+                    android:id="@+id/user_about"
+                    style="@style/user_button_style"
+                    android:text="@string/user_item2"
+                    android:drawableLeft="@drawable/about_icon"
+                    android:drawableRight="@drawable/next_icon" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp" />
+
+                <Button
+                    android:id="@+id/user_logout"
+                    style="@style/user_button_style"
+                    android:text="@string/user_item4"
+                    android:onClick="logoutUser"
+                    android:drawableLeft="@drawable/logout_icon"
+                    android:drawableRight="@drawable/next_icon" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp" />
+
+                <Button
+                    android:id="@+id/user_exitApp"
+                    style="@style/user_button_style"
+                    android:text="@string/user_item5"
+                    android:onClick="exitApp"
+                    android:drawableLeft="@drawable/exit_icon"
+                    android:drawableRight="@drawable/next_icon" />
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>
