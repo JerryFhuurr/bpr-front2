@@ -14,9 +14,14 @@ import java.util.ArrayList;
 
 public class UploadsAdapter extends RecyclerView.Adapter<UploadsAdapter.ViewHolder>{
     private ArrayList<UploadItem> items;
+    private OnItemClickListener clickListener;
 
     public UploadsAdapter(ArrayList<UploadItem> items) {
         this.items = items;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        clickListener = onItemClickListener;
     }
 
     @NonNull
@@ -30,6 +35,16 @@ public class UploadsAdapter extends RecyclerView.Adapter<UploadsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull UploadsAdapter.ViewHolder holder, int position) {
         holder.mView.setText(items.get(position).title);
+
+        if (clickListener != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = holder.getLayoutPosition();
+                    clickListener.onItemClick(holder.itemView, pos);
+                }
+            });
+        }
     }
 
     public void addItem(ArrayList<UploadItem> list){
@@ -51,5 +66,10 @@ public class UploadsAdapter extends RecyclerView.Adapter<UploadsAdapter.ViewHold
             super(itemView);
             mView = itemView.findViewById(R.id.upload_item_title);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
     }
 }

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bpr.front2.R;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
@@ -86,6 +87,19 @@ public class TeacherFragment extends Fragment {
         uploadsR.setLayoutManager(layoutManager);
         uploadsR.setAdapter(adapter);
 
+        //点击事件
+        adapter.setOnItemClickListener(new UploadsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                UploadItem uploadItem = items.get(position);
+                Toast.makeText(getContext(), uploadItem.title, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
 
         // 下拉刷新
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
