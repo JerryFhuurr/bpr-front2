@@ -6,7 +6,7 @@
     android:layout_marginHorizontal="15dp"
     android:layout_marginVertical="30dp"
     android:orientation="vertical"
-    tools:context=".UploadItemFragment">
+    tools:context=".home.user.teacher.uploads.UploadItemFragment">
 
     <TextView
         android:id="@+id/upload_item_title"

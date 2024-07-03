@@ -6,7 +6,7 @@
     android:layout_marginVertical="5dp"
     android:background="@color/cardview_shadow_start_color"
     android:orientation="vertical"
-    tools:context=".CourseItemFragment">
+    tools:context=".home.user.course.CourseItemFragment">
 
     <TextView
         android:id="@+id/course_item_title"

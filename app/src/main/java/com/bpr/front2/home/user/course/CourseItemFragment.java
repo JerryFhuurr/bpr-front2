@@ -1,4 +1,4 @@
-package com.bpr.front2;
+package com.bpr.front2.home.user.course;
 
 import android.os.Bundle;
 
@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class UploadItemFragment extends Fragment {
+import com.bpr.front2.R;
 
-    public UploadItemFragment() {
+public class CourseItemFragment extends Fragment {
+
+    public CourseItemFragment() {
         // Required empty public constructor
     }
 
@@ -24,6 +26,6 @@ public class UploadItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_upload_item, container, false);
+        return inflater.inflate(R.layout.fragment_course_item, container, false);
     }
 }
