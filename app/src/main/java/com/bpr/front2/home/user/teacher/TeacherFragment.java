@@ -36,6 +36,7 @@ public class TeacherFragment extends Fragment {
     private RecyclerView uploadsR;
     private SwipeRefreshLayout refresh;
     private Button openAccountButton;
+    private Button uploadButton;
     private UploadsAdapter adapter;
     private LinearLayoutManager layoutManager;
 
@@ -70,6 +71,7 @@ public class TeacherFragment extends Fragment {
         uploadsR = v.findViewById(R.id.uploads_recycle);
         refresh = v.findViewById(R.id.uploads_refresh);
         openAccountButton = v.findViewById(R.id.manage_account_button);
+        uploadButton = v.findViewById(R.id.upload_resources_button);
         adapter = new UploadsAdapter(items);
         layoutManager = new LinearLayoutManager(getContext());
 
@@ -79,6 +81,7 @@ public class TeacherFragment extends Fragment {
             uploadsR.setVisibility(View.GONE);
             refresh.setVisibility(View.GONE);
             openAccountButton.setVisibility(View.GONE);
+            uploadButton.setVisibility(View.GONE);
         } else {
             accountErrorLabel.setVisibility(View.GONE);
         }
