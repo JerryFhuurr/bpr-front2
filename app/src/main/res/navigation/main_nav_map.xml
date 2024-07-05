@@ -82,5 +82,17 @@
         <action
             android:id="@+id/action_resListFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_resListFragment_to_resDetailFragment"
+            app:destination="@id/resDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resDetailFragment"
+        android:name="com.bpr.front2.ResDetailFragment"
+        android:label="fragment_res_detail"
+        tools:layout="@layout/fragment_res_detail" >
+        <action
+            android:id="@+id/action_resDetailFragment_to_resListFragment"
+            app:destination="@id/resListFragment" />
     </fragment>
 </navigation>
