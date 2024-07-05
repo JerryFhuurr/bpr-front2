@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +33,8 @@ import com.bpr.front2.MainActivity;
 import com.bpr.front2.R;
 import com.bpr.front2.home.user.course.CourseAdapter;
 import com.bpr.front2.home.user.course.CourseItem;
+import com.bpr.front2.home.user.course.CourseVideModel;
+import com.bpr.front2.home.user.course.ResListFragment;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 import com.bpr.front2.login.LoginActivity;
@@ -38,6 +42,7 @@ import com.bpr.front2.login.LoginActivity;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+    private CourseVideModel courseVideModel;
     private TextView usernameLabel;
     private RecyclerView courseR;
     private SwipeRefreshLayout refresh;
@@ -55,8 +60,8 @@ public class HomeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         for (int i = 1; i <= 50; i++) {
             CourseItem item = new CourseItem();
-            item.id = i;
-            item.courseName = "Course " + i; // 设置标题，你可以根据需要修改
+            item.setId(i);
+            item.setCourseName("Course " + i); // 设置标题，你可以根据需要修改
             items.add(item);
         }
     }
@@ -68,6 +73,8 @@ public class HomeFragment extends Fragment {
                          @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+        courseVideModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
+                .get(CourseVideModel.class);
         usernameLabel = v.findViewById(R.id.home_username);
         courseR = v.findViewById(R.id.home_course_recycle);
         refresh = v.findViewById(R.id.home_course_refresh);
@@ -86,7 +93,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 CourseItem uploadItem = items.get(position);
-                Toast.makeText(getContext(), uploadItem.courseName, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), uploadItem.getCourseName(), Toast.LENGTH_SHORT).show();
+                courseVideModel.setCourseItem(uploadItem);
+                NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_resListFragment);
             }
 
             @Override
@@ -110,8 +119,8 @@ public class HomeFragment extends Fragment {
                 for (int i = 0; i < 5; i++) {
                     int index = i + 1;
                     CourseItem item = new CourseItem();
-                    item.id = i;
-                    item.courseName = "new name" + index;
+                    item.setId(i);
+                    item.setCourseName("New Course " + index);
                     newDatas.add(item);
                 }
                 adapter.addItem(newDatas);

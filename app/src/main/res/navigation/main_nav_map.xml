@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_teacherFragment"
             app:destination="@id/teacherFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_resListFragment"
+            app:destination="@id/resListFragment" />
     </fragment>
     <fragment
         android:id="@+id/userFragment"
@@ -70,5 +73,14 @@
         <action
             android:id="@+id/action_uploadResFragment_to_teacherFragment"
             app:destination="@id/teacherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resListFragment"
+        android:name="com.bpr.front2.home.user.course.ResListFragment"
+        android:label="fragment_res_list"
+        tools:layout="@layout/fragment_res_list" >
+        <action
+            android:id="@+id/action_resListFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
