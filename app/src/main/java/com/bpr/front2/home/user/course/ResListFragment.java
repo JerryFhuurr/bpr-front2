@@ -1,4 +1,4 @@
-package com.bpr.front2;
+package com.bpr.front2.home.user.course;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.bpr.front2.R;
 
 /**
  * A simple {@link Fragment} subclass.

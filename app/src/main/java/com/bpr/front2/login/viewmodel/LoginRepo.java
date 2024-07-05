@@ -61,7 +61,7 @@ public class LoginRepo {
 
                         editor.putString("username", username);
                         editor.putString("password", password);
-                        editor.putString("role", "student");
+                        editor.putString("role", "teacher");
                         editor.apply();
                         Log.d(TAG, "working");
                     } else {

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
+import com.bpr.front2.home.user.teacher.uploadPage.UploadResFragment;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 
@@ -85,6 +87,13 @@ public class TeacherFragment extends Fragment {
         } else {
             accountErrorLabel.setVisibility(View.GONE);
         }
+
+        uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(TeacherFragment.this).navigate(R.id.action_teacherFragment_to_uploadResFragment);
+            }
+        });
 
         uploadsR.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         uploadsR.setLayoutManager(layoutManager);

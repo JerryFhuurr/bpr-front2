@@ -111,7 +111,7 @@
 
     <!-- upload -->
     <string name="upload_imageName">Name (Default is filename)</string>
-    <string name="upload_imageCat">Category</string>
+    <string name="upload_course">Course</string>
     <string name="upload_imageSize">Size</string>
     <string name="upload_local_title">Choose local file</string>
     <string name="upload_camera_title">Take images from camera</string>
@@ -125,6 +125,7 @@
     <string name="upload_size_error">The file is too large, the preview image will be compressed</string>
     <string name="upload_waiting_dialog_title">Uploading</string>
     <string name="upload_waiting_dialog_message">Please wait</string>
+    <string name="upload_delete_file">Remove file</string>
 
     <string name="upload_edit">Edit</string>
     <string name="upload_delete">Remove</string>

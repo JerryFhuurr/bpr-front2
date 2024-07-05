@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="5dp"
+    tools:context=".home.user.teacher.uploadPage.UploadFileItemFragment">
+
+    <TextView
+        android:id="@+id/file_name_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/remove_upload_item_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_delete_file"
+        android:layout_gravity="end"
+        android:background="@color/red" />
+
+</LinearLayout>

@@ -7,7 +7,7 @@
     android:layout_marginVertical="15dp"
     android:layout_marginHorizontal="10dp"
     android:orientation="vertical"
-    tools:context=".ResListFragment">
+    tools:context=".home.user.course.ResListFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
