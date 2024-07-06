@@ -68,7 +68,7 @@
     <fragment
         android:id="@+id/uploadResFragment"
         android:name="com.bpr.front2.home.user.teacher.uploadPage.UploadResFragment"
-        android:label="fragment_upload_res"
+        android:label="@string/upload_label_nav"
         tools:layout="@layout/fragment_upload_res" >
         <action
             android:id="@+id/action_uploadResFragment_to_teacherFragment"
@@ -77,7 +77,7 @@
     <fragment
         android:id="@+id/resListFragment"
         android:name="com.bpr.front2.home.user.course.ResListFragment"
-        android:label="fragment_res_list"
+        android:label="@string/res_list_label_nav"
         tools:layout="@layout/fragment_res_list" >
         <action
             android:id="@+id/action_resListFragment_to_homeFragment"
@@ -89,7 +89,7 @@
     <fragment
         android:id="@+id/resDetailFragment"
         android:name="com.bpr.front2.ResDetailFragment"
-        android:label="fragment_res_detail"
+        android:label="@string/res_detail_label_nav"
         tools:layout="@layout/fragment_res_detail" >
         <action
             android:id="@+id/action_resDetailFragment_to_resListFragment"

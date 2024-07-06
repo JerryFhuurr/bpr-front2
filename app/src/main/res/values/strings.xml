@@ -110,6 +110,7 @@
     <string name="settings_theme_title3">Dark</string>
 
     <!-- upload -->
+    <string name="upload_label_nav">Upload</string>
     <string name="upload_imageName">Name (Default is filename)</string>
     <string name="upload_course">Course</string>
     <string name="upload_imageSize">Size</string>
@@ -144,6 +145,10 @@
     <string name="manage_admin_label">Manage accounts(Only for admin)</string>
     <string name="manage_button_label">Open</string>
     <string name="upload_label">Upload new resources</string>
+
+    <!-- res list -->
+    <string name="res_list_label_nav">Recourse list</string>
+    <string name="res_detail_label_nav">Detail</string>
 
 
 </resources>

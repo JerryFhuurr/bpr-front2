@@ -42,7 +42,7 @@ public class ResDetailFragment extends Fragment {
         fileVideModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
                 .get(FileViewModel.class);
         fileItems = fileVideModel.getFileItem();
-        testLabel.setText(fileItems.get(0).toString());
+        testLabel.setText(fileItems.get(0).getFileName());
         return v;
     }
 }
