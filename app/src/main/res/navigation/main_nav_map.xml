@@ -76,7 +76,7 @@
     </fragment>
     <fragment
         android:id="@+id/resListFragment"
-        android:name="com.bpr.front2.home.user.course.ResListFragment"
+        android:name="com.bpr.front2.home.user.course.resource.ResListFragment"
         android:label="@string/res_list_label_nav"
         tools:layout="@layout/fragment_res_list" >
         <action
@@ -88,11 +88,23 @@
     </fragment>
     <fragment
         android:id="@+id/resDetailFragment"
-        android:name="com.bpr.front2.ResDetailFragment"
+        android:name="com.bpr.front2.home.user.course.resource.ResDetailFragment"
         android:label="@string/res_detail_label_nav"
         tools:layout="@layout/fragment_res_detail" >
         <action
             android:id="@+id/action_resDetailFragment_to_resListFragment"
             app:destination="@id/resListFragment" />
+        <action
+            android:id="@+id/action_resDetailFragment_to_videoPlayerFragment"
+            app:destination="@id/videoPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoPlayerFragment"
+        android:name="com.bpr.front2.home.user.course.resource.VideoPlayerFragment"
+        android:label="fragment_video_player"
+        tools:layout="@layout/fragment_video_player" >
+        <action
+            android:id="@+id/action_videoPlayerFragment_to_resDetailFragment"
+            app:destination="@id/resDetailFragment" />
     </fragment>
 </navigation>

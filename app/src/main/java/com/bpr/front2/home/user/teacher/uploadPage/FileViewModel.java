@@ -15,10 +15,10 @@ public class FileViewModel extends ViewModel {
         item1.setSize(1.0f);
 
         UploadFileItem item2 = new UploadFileItem();
-        item1.setFileName("testName 2");
-        item1.setId(2);
-        item1.setType("file");
-        item1.setSize(1.0f);
+        item2.setFileName("testName 2");
+        item2.setId(2);
+        item2.setType("file");
+        item2.setSize(1.0f);
 
         items.add(item1);
         items.add(item2);

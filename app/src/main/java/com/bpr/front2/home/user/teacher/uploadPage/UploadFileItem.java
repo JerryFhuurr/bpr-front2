@@ -1,5 +1,7 @@
 package com.bpr.front2.home.user.teacher.uploadPage;
 
+import androidx.annotation.NonNull;
+
 public class UploadFileItem {
     //TODO 后端完成后修改
     private int id;
@@ -37,5 +39,16 @@ public class UploadFileItem {
 
     public float getSize() {
         return size;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "UploadFileItem{" +
+                "id=" + id +
+                ", fileName='" + fileName + '\'' +
+                ", type='" + type + '\'' +
+                ", size=" + size +
+                '}';
     }
 }

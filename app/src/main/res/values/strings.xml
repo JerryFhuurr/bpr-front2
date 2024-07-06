@@ -149,6 +149,8 @@
     <!-- res list -->
     <string name="res_list_label_nav">Recourse list</string>
     <string name="res_detail_label_nav">Detail</string>
-
+    <string name="comment_title_label">Comment</string>
+    <string name="comment_hint">Write comment here :-)</string>
+    <string name="comment_button">Commit comment</string>
 
 </resources>

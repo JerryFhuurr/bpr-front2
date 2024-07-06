@@ -3,7 +3,6 @@ package com.bpr.front2.home;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -12,11 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
@@ -24,25 +20,19 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bpr.front2.MainActivity;
 import com.bpr.front2.R;
 import com.bpr.front2.home.user.course.CourseAdapter;
 import com.bpr.front2.home.user.course.CourseItem;
-import com.bpr.front2.home.user.course.CourseVideModel;
-import com.bpr.front2.home.user.course.ResListFragment;
-import com.bpr.front2.home.user.teacher.uploads.UploadItem;
+import com.bpr.front2.home.user.course.CourseViewModel;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
-import com.bpr.front2.login.LoginActivity;
 
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
-    private CourseVideModel courseVideModel;
+    private CourseViewModel courseViewModel;
     private TextView usernameLabel;
     private RecyclerView courseR;
     private SwipeRefreshLayout refresh;
@@ -73,8 +63,8 @@ public class HomeFragment extends Fragment {
                          @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        courseVideModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
-                .get(CourseVideModel.class);
+        courseViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
+                .get(CourseViewModel.class);
         usernameLabel = v.findViewById(R.id.home_username);
         courseR = v.findViewById(R.id.home_course_recycle);
         refresh = v.findViewById(R.id.home_course_refresh);
@@ -94,7 +84,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 CourseItem uploadItem = items.get(position);
                 Toast.makeText(getContext(), uploadItem.getCourseName(), Toast.LENGTH_SHORT).show();
-                courseVideModel.setCourseItem(uploadItem);
+                courseViewModel.setCourseItem(uploadItem);
                 NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_resListFragment);
             }
 

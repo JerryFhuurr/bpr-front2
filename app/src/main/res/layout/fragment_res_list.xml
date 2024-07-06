@@ -7,7 +7,7 @@
     android:layout_marginVertical="15dp"
     android:layout_marginHorizontal="10dp"
     android:orientation="vertical"
-    tools:context=".home.user.course.ResListFragment">
+    tools:context=".home.user.course.resource.ResListFragment">
 
     <TextView
         android:id="@+id/list_course_name"
