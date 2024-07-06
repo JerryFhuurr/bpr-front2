@@ -64,6 +64,9 @@
         <action
             android:id="@+id/action_teacherFragment_to_uploadResFragment"
             app:destination="@id/uploadResFragment" />
+        <action
+            android:id="@+id/action_teacherFragment_to_manageAccountFragment"
+            app:destination="@id/manageAccountFragment" />
     </fragment>
     <fragment
         android:id="@+id/uploadResFragment"
@@ -106,5 +109,14 @@
         <action
             android:id="@+id/action_videoPlayerFragment_to_resDetailFragment"
             app:destination="@id/resDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manageAccountFragment"
+        android:name="com.bpr.front2.home.user.teacher.admin.ManageAccountFragment"
+        android:label="fragment_manage_account"
+        tools:layout="@layout/fragment_manage_account" >
+        <action
+            android:id="@+id/action_manageAccountFragment_to_teacherFragment"
+            app:destination="@id/teacherFragment" />
     </fragment>
 </navigation>

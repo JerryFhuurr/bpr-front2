@@ -153,4 +153,7 @@
     <string name="comment_hint">Write comment here :-)</string>
     <string name="comment_button">Commit comment</string>
 
+    <!-- admin -->
+    <string name="add_account_label">Add account</string>
+
 </resources>

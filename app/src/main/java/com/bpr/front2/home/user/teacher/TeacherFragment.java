@@ -86,7 +86,20 @@ public class TeacherFragment extends Fragment {
             uploadButton.setVisibility(View.GONE);
         } else {
             accountErrorLabel.setVisibility(View.GONE);
+            if (userRoleGet.equals("admin")) {
+                openAccountButton.setVisibility(View.VISIBLE);
+            } else {
+                openAccountButton.setVisibility(View.GONE);
+            }
         }
+
+        openAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(TeacherFragment.this)
+                        .navigate(R.id.action_teacherFragment_to_manageAccountFragment);
+            }
+        });
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
