@@ -118,5 +118,17 @@
         <action
             android:id="@+id/action_manageAccountFragment_to_teacherFragment"
             app:destination="@id/teacherFragment" />
+        <action
+            android:id="@+id/action_manageAccountFragment_to_createAccountFragment"
+            app:destination="@id/createAccountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="com.bpr.front2.home.user.teacher.admin.CreateAccountFragment"
+        android:label="fragment_create_account"
+        tools:layout="@layout/fragment_create_account" >
+        <action
+            android:id="@+id/action_createAccountFragment_to_manageAccountFragment"
+            app:destination="@id/manageAccountFragment" />
     </fragment>
 </navigation>

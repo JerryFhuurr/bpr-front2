@@ -37,10 +37,10 @@
     <string name="register_password_r">Repeat password</string>
     <string name="register_ok">Register</string>
     <string name="register_change_login">Already have account? Login here</string>
-    <string name="register_error">Invalid email address or Password does not match !</string>
+    <string name="register_error">Username cannot be empty!</string>
     <string name="register_info">Register success !</string>
     <string name="register_password_hint">At least 6 characters</string>
-    <string name="register_username_hint">Username (Optional)</string>
+    <string name="register_username_hint">Username</string>
     <string name="register_email_occupied">The email address is already in use by another account.</string>
 
     <!-- home -->
