@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_accountFragment_to_userFragment"
             app:destination="@id/userFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -130,5 +133,14 @@
         <action
             android:id="@+id/action_createAccountFragment_to_manageAccountFragment"
             app:destination="@id/manageAccountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.bpr.front2.home.user.ResetPasswordFragment"
+        android:label="fragment_reset_password"
+        tools:layout="@layout/fragment_reset_password" >
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
     </fragment>
 </navigation>

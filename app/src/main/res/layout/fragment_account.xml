@@ -132,7 +132,6 @@
                     android:layout_weight="2.5"
                     android:gravity="center|left"
                     android:singleLine="true"
-                    android:text="Loading..."
                     android:textSize="20dp" />
 
                 <Button

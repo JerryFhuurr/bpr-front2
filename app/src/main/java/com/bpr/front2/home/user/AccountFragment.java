@@ -4,12 +4,11 @@ import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 
 import com.bpr.front2.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,7 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -99,7 +96,8 @@ public class AccountFragment extends Fragment {
         changePassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPassDialog();
+                NavHostFragment.findNavController(AccountFragment.this)
+                        .navigate(R.id.action_accountFragment_to_resetPasswordFragment);
             }
         });
         return v;
@@ -128,43 +126,6 @@ public class AccountFragment extends Fragment {
         );
 
         datePickerDialog.show();
-    }
-
-    protected void showPassDialog() {
-        LayoutInflater factory = LayoutInflater.from(getContext());
-        final View textEntryView = factory.inflate(R.layout.change_password_dialog, null);
-        final EditText passEdit = (EditText) textEntryView.findViewById(R.id.editPasswordD);
-        final EditText passREdit = (EditText)textEntryView.findViewById(R.id.editPasswordRD);
-        AlertDialog.Builder ad1 = new AlertDialog.Builder(getContext());
-        ad1.setTitle(R.string.login_reset_title);
-        ad1.setView(textEntryView);
-        ad1.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int i) {
-                String password = passEdit.getText().toString();
-                String newPassword = passREdit.getText().toString();
-
-                //TODO 添加获取当前密码的代码
-                if (password.equals("123456")) {
-                    // 密码一致，执行相应操作
-                    if (newPassword.length() >= 8) {
-                        //TODO 正常操作
-
-                    } else {
-                        Toast.makeText(getContext(), R.string.account_pass_origin_d_error_2, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    // 密码不一致，标红并显示错误提示
-                    Toast.makeText(getContext(), R.string.account_pass_origin_d_error, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        ad1.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int i) {
-                dialog.cancel();
-            }
-        });
-        ad1.show();// 显示对话框
-
     }
 
 
@@ -247,7 +208,7 @@ public class AccountFragment extends Fragment {
                         saveUserInfo(responseBody, username);
                     }
                 } catch (IOException e) {
-                    Log.w(TAG, e.getLocalizedMessage());
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
                     throw new RuntimeException(e);
                 }
             }
@@ -272,4 +233,5 @@ public class AccountFragment extends Fragment {
             }
         });
     }
+
 }
