@@ -1,6 +1,9 @@
 package com.bpr.front2.home.user;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,12 +21,12 @@ import com.bpr.front2.R;
 public class UserFragment extends Fragment {
 
     private TextView userNameText;
-    private String userName;
     private Button account;
     private Button about;
     private Button cache;
     private Button settings;
     private ImageView iconView;
+    private SharedPreferences sharedPreferences;
 
     public UserFragment() {
         // Required empty public constructor
@@ -32,9 +35,7 @@ public class UserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO 添加获取用户名的部分
-
-        userName = "testUser";
+        sharedPreferences = getContext().getSharedPreferences("user", MODE_PRIVATE);
     }
 
     @SuppressLint("MissingInflatedId")
@@ -49,6 +50,8 @@ public class UserFragment extends Fragment {
         about = v.findViewById(R.id.user_about);
         settings = v.findViewById(R.id.user_settings);
         userNameText = v.findViewById(R.id.user_name);
+
+        userNameText.setText(sharedPreferences.getString("username", ""));
 
         account.setOnClickListener(new View.OnClickListener() {
             @Override

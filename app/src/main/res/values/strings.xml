@@ -70,7 +70,7 @@
     <string name="account_update_password_text">Password :</string>
     <string name="account_update_password">Change password</string>
     <string name="account_change">Change</string>
-    <string name="account_setUsername">Username updated !</string>
+    <string name="account_setOK">Info updated !</string>
     <string name="account_resetPassword">An email has been sent to your email, please check it and finish reset password.</string>
     <string name="account_update_email_text">Email :</string>
     <string name="account_update_phone_text">Phone :</string>
