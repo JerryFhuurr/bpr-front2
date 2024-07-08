@@ -24,7 +24,7 @@
     <!-- login reset -->
     <string name="login_reset_title">Reset password</string>
     <string name="login_reset_title_r">Repeat password</string>
-    <string name="login_reset_body">Enter username here to reset</string>
+    <string name="login_reset_body">If you forget your password, please contact admin to reset it!</string>
     <string name="login_reset_ok">Email has been sent !</string>
     <string name="login_reset_error">Cannot find this email !</string>
     <string name="login_nullError">Please provide email and password !</string>

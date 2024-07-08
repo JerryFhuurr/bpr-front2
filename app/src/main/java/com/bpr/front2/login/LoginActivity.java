@@ -88,44 +88,20 @@ public class LoginActivity extends AppCompatActivity {
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder resetPassword = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogReset);
+                AlertDialog.Builder resetPassword = new AlertDialog.Builder(LoginActivity.this);
                 resetPassword.setTitle(R.string.login_reset_title);
                 resetPassword.setMessage(R.string.login_reset_body);
-                final EditText reset_email = new EditText(getApplicationContext());
-                resetPassword.setView(reset_email);
                 resetPassword.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String email = reset_email.getText().toString();
-                        String emailE = emailEncode(email);
-                        Log.v("email replace", emailE);
 
-                        //TODO 添加发送HTTP请求以重置密码的代码（等后端完成后添加）
-//                        mAuth.sendPasswordResetEmail(email)
-//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            Log.d(TAG, "Email sent.");
-//                                            Toast.makeText(getContext(), R.string.login_reset_ok, Toast.LENGTH_SHORT).show();
-//                                        }
-//                                        //add error if the email isn't exist
-//                                    }
-//                                });
-
-                    }
-                });
-
-                resetPassword.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
                     }
                 });
                 resetPassword.show();
             }
         });
     }
+
 
     private void goToMainActivity() {
         startActivity(new Intent(this, MainActivity.class));

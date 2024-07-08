@@ -1,10 +1,13 @@
 package com.bpr.front2;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -25,6 +28,17 @@ import androidx.navigation.ui.NavigationUI;
 import com.bpr.front2.handler.ActivityManager;
 import com.bpr.front2.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Objects;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -92,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), R.string.main_login_info, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+        } else {
+            getUserR(usernameGet);
         }
     }
 
@@ -124,6 +140,52 @@ public class MainActivity extends AppCompatActivity {
         } else if (appTheme.equals("dark")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
+    }
+
+    //HTTP
+    private void getUserR(String username) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String url = "http://192.168.0.150:8080/user/getinfo?username=" + username;
+                Request request = new Request.Builder().url(url).get().build();
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                        setRole(responseBody);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private void setRole(final String responseBody) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONArray jsonArray = new JSONArray(responseBody);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject o = jsonArray.getJSONObject(i);
+                        String role = o.getString("role");
+
+                        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        editor.putString("role", role);
+                        editor.apply();
+                    }
+                } catch (JSONException e) {
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                }
+            }
+        });
     }
 
 }
