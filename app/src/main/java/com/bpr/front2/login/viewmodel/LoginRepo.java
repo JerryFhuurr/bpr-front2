@@ -9,9 +9,13 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,7 +26,6 @@ public class LoginRepo {
 
     private static LoginRepo instance;
     private final Application app;
-    private CountDownLatch latch; // 添加 CountDownLatch
 
     private LoginRepo(Application app) {
         this.app = app;
@@ -36,48 +39,35 @@ public class LoginRepo {
     }
 
     public void setInfo(String username, String password) {
-        latch = new CountDownLatch(1);
-        new Thread(new Runnable() {
+        OkHttpClient client = new OkHttpClient();
+        String url = "http://192.168.0.150:8080/user/login?username=" + username + "&password=" + password;
+
+        Request request = new Request.Builder().url(url).get().build();
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void run() {
-                OkHttpClient client = new OkHttpClient();
-                RequestBody formBody = new FormBody.Builder()
-                        .add("username", username)
-                        .add("password", password)
-                        .build();
-
-                Request request = new Request.Builder()
-                        .url("http://39.101.134.253:8080/test/users/testc/post")
-                        .post(formBody)
-                        .build();
-
-                Response response = null;
-
-                try {
-                    response = client.newCall(request).execute();
-                    if (response.isSuccessful()) {
-                        SharedPreferences sharedPreferences = app.getSharedPreferences("user", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                        editor.putString("username", username);
-                        editor.putString("password", password);
-                        editor.putString("role", "admin");
-                        editor.apply();
-                        Log.d(TAG, "working");
-                    } else {
-                        Log.d(TAG, "Unexpected code " + response);
-                        throw new IOException("Unexpected code " + response);
-                    }
-                } catch (IOException e) {
-                    Log.d(TAG, "Unexpected code " + e);
-                    throw new RuntimeException(e);
-                }
-                latch.countDown();
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.d(TAG, "Login fail " + e.getLocalizedMessage());
+                Toast.makeText(app.getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG);
             }
-        }).start();
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                String responseBody = response.body().string();
+                Log.i(TAG, responseBody);
+                if (responseBody.contains("successful")) {
+                    SharedPreferences sharedPreferences = app.getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.putString("username", username);
+                    Log.i(TAG, "working 1");
+                    editor.apply();
+                } else {
+                    Log.d(TAG, "Unexpected code " + response);
+                    throw new IOException("Unexpected code " + response);
+                }
+                response.body().close();
+            }
+        });
     }
 
-    public void awaitCompletion() throws InterruptedException {
-        latch.await(); // 等待异步操作完成
-    }
 }

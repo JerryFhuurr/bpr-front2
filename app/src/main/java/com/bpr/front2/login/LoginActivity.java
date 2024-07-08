@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,7 +30,14 @@ import com.bpr.front2.handler.ActivityManager;
 import com.bpr.front2.login.viewmodel.LoginRepo;
 import com.bpr.front2.login.viewmodel.LoginViewmodel;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordText;
     private Button loginButton;
     private TextView forgetPassword;
+    private TextView errorLabel;
     private long exitTime = 0;
-    private CountDownLatch latch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.password_login);
         loginButton = findViewById(R.id.button_login);
         forgetPassword = findViewById(R.id.login_forget);
-        latch = new CountDownLatch(1);
+        errorLabel = findViewById(R.id.login_error_label);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,27 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordText.getText().toString().trim();
 
                 if (!username.isEmpty() && !password.isEmpty()) {
-                    LoginRepo loginRepo = LoginRepo.getInstance(getApplication());
-                    loginRepo.setInfo(username, password);
-                    // 阻塞主线程，直到子线程中的操作完成
-                    try {
-                        loginRepo.awaitCompletion();
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, "InterruptedException: " + e.getMessage());
-                    }
-
-                    SharedPreferences sharedPreferences = getSharedPreferences("user",MODE_PRIVATE);
-                    String usernameGet = sharedPreferences.getString("username", "");
-
-                    Log.i(TAG, "username->" + usernameGet);
-                    if (!usernameGet.isEmpty()) {
-                        Log.d(TAG, "signInWithEmail:success");
-                        goToMainActivity();
-                    } else {
-                        //TODO 修改密码错误时的提示（等后端完成）
-                        Log.w(TAG, "signInWithEmail:failure");
-                        Toast.makeText(getApplicationContext(), R.string.login_fail, Toast.LENGTH_LONG).show();
-                    }
+                    setInfo(username, password);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.login_nullError, Toast.LENGTH_SHORT).show();
                 }
@@ -166,5 +154,50 @@ public class LoginActivity extends AppCompatActivity {
 
     private String emailEncode(String email) {
         return email.replace(".", ",");
+    }
+
+
+    // HTTP
+    private void setInfo(String username, String password) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String url = "http://192.168.0.150:8080/user/login?username=" + username + "&password=" + password;
+
+                Request request = new Request.Builder().url(url).get().build();
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                        loginShowResponse(responseBody, username);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+
+    }
+
+    private void loginShowResponse(final String responseBody, final String username) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (responseBody.contains("successful")) {
+                    SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.putString("username", username);
+                    editor.apply();
+                    goToMainActivity();
+                } else {
+                    errorLabel.setText(responseBody);
+                    Log.d(TAG, "Unexpected code " + responseBody);
+                }
+            }
+        });
     }
 }

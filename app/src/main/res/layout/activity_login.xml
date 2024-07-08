@@ -58,6 +58,14 @@
             android:hint="@string/login_password_hint"
             android:inputType="textPassword"
             android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/login_error_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/red" />
     </LinearLayout>
 
     <LinearLayout
