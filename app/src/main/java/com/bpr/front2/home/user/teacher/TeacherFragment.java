@@ -1,5 +1,6 @@
 package com.bpr.front2.home.user.teacher;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
@@ -15,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +25,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
+import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.teacher.uploadPage.UploadResFragment;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class TeacherFragment extends Fragment {
@@ -53,8 +66,6 @@ public class TeacherFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getContext().getSharedPreferences("user", MODE_PRIVATE);
-
         for (int i = 1; i <= 50; i++) {
             UploadItem item = new UploadItem();
             item.id = i;
@@ -74,10 +85,13 @@ public class TeacherFragment extends Fragment {
         refresh = v.findViewById(R.id.uploads_refresh);
         openAccountButton = v.findViewById(R.id.manage_account_button);
         uploadButton = v.findViewById(R.id.upload_resources_button);
-        adapter = new UploadsAdapter(items);
         layoutManager = new LinearLayoutManager(getContext());
 
+        sharedPreferences = requireActivity().getSharedPreferences("user", MODE_PRIVATE);
         userRoleGet = sharedPreferences.getString("role", "student");
+        int userId = sharedPreferences.getInt("userId", 0);
+        Log.i(TAG, userRoleGet);
+
         if (userRoleGet.equals("student")) {
             accountErrorLabel.setVisibility(View.VISIBLE);
             uploadsR.setVisibility(View.GONE);
@@ -104,11 +118,62 @@ public class TeacherFragment extends Fragment {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(TeacherFragment.this).navigate(R.id.action_teacherFragment_to_uploadResFragment);
+                NavHostFragment.findNavController(TeacherFragment.this)
+                        .navigate(R.id.action_teacherFragment_to_uploadResFragment);
             }
         });
 
-        uploadsR.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        getResList(userId);
+        return v;
+    }
+
+    private void getResList(int userId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String url = HttpUtils.baseUrl1 + "/video/get/list/user?userId=" + userId;
+                Request request = new Request.Builder().url(url).get().build();
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                        setResList(responseBody, userId);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private void setResList(final String response, final int userId) {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                items.clear();
+                try {
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject o = jsonArray.getJSONObject(i);
+                        UploadItem item = new UploadItem();
+                        item.title = o.getString("videoTitle");
+                        item.id = o.getInt("videoId");
+                        items.add(item);
+                    }
+                    setRefreshView(userId);
+                } catch (JSONException e) {
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                }
+            }
+        });
+    }
+
+    private void setRefreshView(int userId) {
+        adapter = new UploadsAdapter(items);
+        uploadsR.addItemDecoration(new DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL));
         uploadsR.setLayoutManager(layoutManager);
         uploadsR.setAdapter(adapter);
 
@@ -136,11 +201,16 @@ public class TeacherFragment extends Fragment {
                 refresh.setRefreshing(true);
 
                 //向头部插入数据
-                //TODO 后端完成后修改为拉取数据
-
+                getResList(userId);
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //模拟加载时间，设置不可见
+                        refresh.setRefreshing(false);
+                    }
+                }, 1000);
             }
         });
 
-        return v;
     }
 }

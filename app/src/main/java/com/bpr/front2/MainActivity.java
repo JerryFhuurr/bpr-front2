@@ -171,17 +171,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    JSONArray jsonArray = new JSONArray(responseBody);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject o = jsonArray.getJSONObject(i);
-                        String role = o.getString("role");
+                    JSONObject o = new JSONObject(responseBody);
+                    String role = o.getString("role");
+                    int userId = o.getInt("userId");
 
-                        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                    SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                        editor.putString("role", role);
-                        editor.apply();
-                    }
+                    editor.putString("role", role);
+                    editor.putInt("userId", userId);
+                    editor.apply();
+
                 } catch (JSONException e) {
                     Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
                 }
