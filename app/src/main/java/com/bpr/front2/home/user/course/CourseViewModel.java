@@ -1,15 +1,24 @@
 package com.bpr.front2.home.user.course;
 
+import static android.content.ContentValues.TAG;
+
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 
+import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class CourseViewModel extends ViewModel {
 
     private CourseItem courseItem;
-    private ArrayList<UploadItem> uploadItems = new ArrayList<>();
 
     public void setCourseItem(CourseItem courseItem) {
         this.courseItem = courseItem;
@@ -19,17 +28,7 @@ public class CourseViewModel extends ViewModel {
         return courseItem;
     }
 
-    public ArrayList<UploadItem> getUploadItems() {
-        return uploadItems;
-    }
 
     //TODO 后端完成后修改
-    public void setUploadItems() {
-        for (int i = 1; i <= 5; i++) {
-            UploadItem item = new UploadItem();
-            item.id = i;
-            item.title = "Title " + i; // 设置标题，你可以根据需要修改
-            uploadItems.add(item);
-        }
-    }
+
 }

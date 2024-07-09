@@ -24,15 +24,11 @@
             android:id="@+id/search_edit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/login_edit_shape"
+            android:drawableLeft="@drawable/search_icon"
             android:hint="@string/home_search_hint"
             android:layout_weight="1"/>
 
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawableLeft="@drawable/search_icon"
-            android:layout_weight="5" />
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

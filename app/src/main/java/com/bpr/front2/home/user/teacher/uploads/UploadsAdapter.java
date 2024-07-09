@@ -47,10 +47,12 @@ public class UploadsAdapter extends RecyclerView.Adapter<UploadsAdapter.ViewHold
         }
     }
 
-    public void addItem(ArrayList<UploadItem> list){
-        list.addAll(items);
-        items.clear();
-        items.addAll(list);
+    public void searchItem(String text) {
+        for (UploadItem ui : items) {
+            if (!ui.title.contains(text)) {
+                items.remove(ui);
+            }
+        }
         notifyDataSetChanged();
     }
 

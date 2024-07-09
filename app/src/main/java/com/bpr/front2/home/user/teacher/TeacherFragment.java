@@ -137,22 +137,7 @@ public class TeacherFragment extends Fragment {
 
                 //向头部插入数据
                 //TODO 后端完成后修改为拉取数据
-                ArrayList<UploadItem> newDatas = new ArrayList<UploadItem>();
-                for (int i = 0; i < 5; i++) {
-                    int index = i + 1;
-                    UploadItem item = new UploadItem();
-                    item.id = i;
-                    item.title = "new item" + index;
-                    newDatas.add(item);
-                }
-                adapter.addItem(newDatas);
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //模拟加载时间，设置不可见
-                        refresh.setRefreshing(false);
-                    }
-                }, 1000);
+
             }
         });
 

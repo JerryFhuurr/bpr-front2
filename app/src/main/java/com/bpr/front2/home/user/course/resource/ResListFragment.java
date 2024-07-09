@@ -1,5 +1,7 @@
 package com.bpr.front2.home.user.course.resource;
 
+import static android.content.ContentValues.TAG;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
@@ -13,27 +15,43 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
+import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.course.CourseItem;
 import com.bpr.front2.home.user.course.CourseViewModel;
 import com.bpr.front2.home.user.teacher.uploadPage.FileViewModel;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class ResListFragment extends Fragment {
 
     private CourseViewModel courseViewModel;
     private FileViewModel fileViewModel;
-
+    private EditText searchEdit;
     private TextView courseNameLabel;
     private CourseItem courseItem;
     private RecyclerView uploadsR;
@@ -66,12 +84,60 @@ public class ResListFragment extends Fragment {
         courseNameLabel = v.findViewById(R.id.list_course_name);
         courseItem = courseViewModel.getCourseItem();
         courseNameLabel.setText(courseItem.getCourseName());
-        //TODO 后期修改
-        courseViewModel.setUploadItems();
-        items = courseViewModel.getUploadItems();
-
         uploadsR = v.findViewById(R.id.uploads_recycle);
         refresh = v.findViewById(R.id.uploads_refresh);
+        searchEdit = v.findViewById(R.id.search_edit);
+
+        loadItems();
+        return v;
+    }
+
+    private void loadItems() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String url = HttpUtils.baseUrl1 + "/video/get/list?courseId=" + courseItem.getId();
+                Request request = new Request.Builder().url(url).get().build();
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                        setItems(responseBody);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private void setItems(final String response) {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    items.clear();
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject o = jsonArray.getJSONObject(i);
+                        UploadItem uploadItem = new UploadItem();
+                        uploadItem.id = o.getInt("videoId");
+                        uploadItem.title = o.getString("videoTitle");
+                        items.add(uploadItem);
+                    }
+                    Log.i(TAG, String.valueOf(items.size()));
+                    setRecyclerLayout();
+                } catch (JSONException e) {
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                }
+            }
+        });
+    }
+
+    private void setRecyclerLayout() {
         adapter = new UploadsAdapter(items);
         layoutManager = new LinearLayoutManager(getContext());
 
@@ -84,9 +150,9 @@ public class ResListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 UploadItem uploadItem = items.get(position);
-                Toast.makeText(getContext(), uploadItem.title, Toast.LENGTH_SHORT).show();
                 fileViewModel.setFileItem(uploadItem.title);
-                NavHostFragment.findNavController(ResListFragment.this).navigate(R.id.action_resListFragment_to_resDetailFragment);
+                NavHostFragment.findNavController(ResListFragment.this)
+                        .navigate(R.id.action_resListFragment_to_resDetailFragment);
             }
 
             @Override
@@ -104,11 +170,7 @@ public class ResListFragment extends Fragment {
                 //设置可见
                 refresh.setRefreshing(true);
 
-                //向头部插入数据
-                //TODO 后端完成后修改为拉取数据
-                items = courseViewModel.getUploadItems();
-                uploadsR.setAdapter(adapter);
-
+                loadItems();
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -118,6 +180,37 @@ public class ResListFragment extends Fragment {
                 }, 1000);
             }
         });
-        return v;
+
+        setSearch();
+    }
+
+    private void setSearch() {
+        searchEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // delay 8ms then request
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // no op
+                    }
+                }, 800);
+                if (editable.toString().isEmpty()) {
+                    loadItems();
+                } else {
+                    adapter.searchItem(editable.toString());
+                }
+            }
+        });
     }
 }
