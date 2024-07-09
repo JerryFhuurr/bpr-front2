@@ -1,5 +1,6 @@
 package com.bpr.front2.home;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
@@ -17,19 +18,33 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
+import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.course.CourseAdapter;
 import com.bpr.front2.home.user.course.CourseItem;
 import com.bpr.front2.home.user.course.CourseViewModel;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class HomeFragment extends Fragment {
     private CourseViewModel courseViewModel;
@@ -48,12 +63,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i = 1; i <= 50; i++) {
-            CourseItem item = new CourseItem();
-            item.setId(i);
-            item.setCourseName("Course " + i); // 设置标题，你可以根据需要修改
-            items.add(item);
-        }
     }
 
     @SuppressLint({"MissingInflatedId", "CutPasteId"})
@@ -68,12 +77,67 @@ public class HomeFragment extends Fragment {
         usernameLabel = v.findViewById(R.id.home_username);
         courseR = v.findViewById(R.id.home_course_recycle);
         refresh = v.findViewById(R.id.home_course_refresh);
-        adapter = new CourseAdapter(items);
+
+        int itemsSize = items.size();
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("user", MODE_PRIVATE);
         String usernameGet = sharedPreferences.getString("username", "null");
         usernameLabel.setText(usernameGet);
 
+        getCourseList(usernameGet);
+
+        return v;
+    }
+
+
+    //HTTP
+    private void getCourseList(String username) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String url = HttpUtils.baseUrl1 + "/course/get/user?username=" + username;
+                Request request = new Request.Builder().url(url).get().build();
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                        setCourseList(responseBody, username);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private void setCourseList(final String response, final String username) {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    items.clear();
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject o = jsonArray.getJSONObject(i);
+                        CourseItem courseItem = new CourseItem();
+                        courseItem.setId(o.getInt("courseId"));
+                        courseItem.setCourseName(o.getString("courseName"));
+                        items.add(courseItem);
+                    }
+                    Log.i(TAG, String.valueOf(items.size()));
+                    setRecyclerLayout(username);
+                } catch (JSONException e) {
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                }
+            }
+        });
+    }
+
+    private void setRecyclerLayout(String usernameGet) {
+        adapter = new CourseAdapter(items);
         layoutManager = new GridLayoutManager(getContext(), 4);
         courseR.setLayoutManager(layoutManager);
         courseR.setAdapter(adapter);
@@ -103,17 +167,7 @@ public class HomeFragment extends Fragment {
                 //设置可见
                 refresh.setRefreshing(true);
 
-                //向头部插入数据
-                //TODO 后端完成后修改为拉取数据
-                ArrayList<CourseItem> newDatas = new ArrayList<CourseItem>();
-                for (int i = 0; i < 5; i++) {
-                    int index = i + 1;
-                    CourseItem item = new CourseItem();
-                    item.setId(i);
-                    item.setCourseName("New Course " + index);
-                    newDatas.add(item);
-                }
-                adapter.addItem(newDatas);
+                getCourseList(usernameGet);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -123,9 +177,5 @@ public class HomeFragment extends Fragment {
                 }, 1000);
             }
         });
-        return v;
     }
-
-
-
 }
