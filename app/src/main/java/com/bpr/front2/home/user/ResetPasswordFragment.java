@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
+import com.bpr.front2.handler.HttpUtils;
 
 import java.io.IOException;
 
@@ -83,7 +84,7 @@ public class ResetPasswordFragment extends Fragment {
                 SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("user", MODE_PRIVATE);
                 String username = sharedPreferences.getString("username", "");
                 OkHttpClient client = new OkHttpClient();
-                String url = "http://192.168.0.150:8080/user/update/password";
+                String url = HttpUtils.baseUrl1 + "/user/update/password";
                 FormBody.Builder requestBuild = new FormBody.Builder();
                 RequestBody requestBody = requestBuild
                         .add("username", username)

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
+import com.bpr.front2.handler.HttpUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -135,7 +136,7 @@ public class AccountFragment extends Fragment {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
-                String url = "http://192.168.0.150:8080/user/getinfo?username=" + username;
+                String url = HttpUtils.baseUrl1 + "/user/getinfo?username=" + username;
                 Request request = new Request.Builder().url(url).get().build();
                 try {
                     Response response = client.newCall(request).execute();
@@ -193,7 +194,7 @@ public class AccountFragment extends Fragment {
                         "application/json; charset=utf-8"
                 ), jo.toString());
                 Log.i(TAG, jo.toString());
-                String path = "http://192.168.0.150:8080/user/update/info";
+                String path = HttpUtils.baseUrl1 + "/user/update/info";
                 Request request = new Request.Builder()
                         .url(path)
                         .put(requestBody)

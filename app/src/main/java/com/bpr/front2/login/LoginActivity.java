@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,32 +15,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.bpr.front2.MainActivity;
 import com.bpr.front2.R;
 import com.bpr.front2.handler.ActivityManager;
-import com.bpr.front2.login.viewmodel.LoginRepo;
-import com.bpr.front2.login.viewmodel.LoginViewmodel;
+import com.bpr.front2.handler.HttpUtils;
 
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginViewmodel mViewModel;
     private EditText usernameText;
     private EditText passwordText;
     private Button loginButton;
@@ -63,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mViewModel = new ViewModelProvider(this).get(LoginViewmodel.class);
         usernameText = findViewById(R.id.username_login);
         passwordText = findViewById(R.id.password_login);
         loginButton = findViewById(R.id.button_login);
@@ -139,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
-                String url = "http://192.168.0.150:8080/user/login?username=" + username + "&password=" + password;
+                String url = HttpUtils.baseUrl1 + "/user/login?username=" + username + "&password=" + password;
 
                 Request request = new Request.Builder().url(url).get().build();
                 try {

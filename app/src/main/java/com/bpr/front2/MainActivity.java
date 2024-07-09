@@ -26,6 +26,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bpr.front2.handler.ActivityManager;
+import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -148,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
-                String url = "http://192.168.0.150:8080/user/getinfo?username=" + username;
+                String url = HttpUtils.baseUrl1 + "/user/getinfo?username=" + username;
                 Request request = new Request.Builder().url(url).get().build();
                 try {
                     Response response = client.newCall(request).execute();
