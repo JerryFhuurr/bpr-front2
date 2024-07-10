@@ -22,7 +22,7 @@
                 android:padding="5dp">
 
                 <EditText
-                    android:id="@+id/file_name_edit"
+                    android:id="@+id/file_title_edit"
                     android:layout_width="match_parent"
                     android:layout_height="65dp"
                     android:singleLine="true"
@@ -33,7 +33,7 @@
                 <EditText
                     android:id="@+id/file_desc_edit"
                     android:layout_width="match_parent"
-                    android:layout_height="65dp"
+                    android:layout_height="wrap_content"
                     android:singleLine="false"
                     android:hint="@string/upload_desc_hint"
                     app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +87,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:textSize="15sp" />
+                            android:textColor="@color/purple_700"
+                            android:textSize="25sp" />
                         <Button
                             android:id="@+id/choose_video_button"
                             android:layout_width="match_parent"
@@ -118,7 +119,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:textSize="15sp" />
+                            android:textColor="@color/purple_700"
+                            android:textSize="25sp" />
                         <Button
                             android:id="@+id/choose_file_button"
                             android:layout_width="match_parent"
