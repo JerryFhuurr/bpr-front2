@@ -21,16 +21,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.course.CourseItem;
 import com.bpr.front2.home.user.course.CourseViewModel;
-import com.bpr.front2.home.user.teacher.uploadPage.FileViewModel;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 
@@ -50,7 +47,6 @@ import okhttp3.Response;
 public class ResListFragment extends Fragment {
 
     private CourseViewModel courseViewModel;
-    private FileViewModel fileViewModel;
     private EditText searchEdit;
     private TextView courseNameLabel;
     private CourseItem courseItem;
@@ -79,8 +75,7 @@ public class ResListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_res_list, container, false);
         courseViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
                 .get(CourseViewModel.class);
-        fileViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
-                .get(FileViewModel.class);
+
         courseNameLabel = v.findViewById(R.id.list_course_name);
         courseItem = courseViewModel.getCourseItem();
         courseNameLabel.setText(courseItem.getCourseName());
@@ -150,7 +145,7 @@ public class ResListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 UploadItem uploadItem = items.get(position);
-                fileViewModel.setFileItem(uploadItem.title);
+                // TODO 向detail页面传递标题
                 NavHostFragment.findNavController(ResListFragment.this)
                         .navigate(R.id.action_resListFragment_to_resDetailFragment);
             }

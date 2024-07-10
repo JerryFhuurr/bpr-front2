@@ -37,6 +37,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.4.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.4.0")
     implementation("com.github.bumptech.glide:glide:3.7.0")
+    implementation ("com.github.permissions-dispatcher:permissionsdispatcher:4.9.2")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

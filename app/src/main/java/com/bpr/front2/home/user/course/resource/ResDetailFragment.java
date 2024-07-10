@@ -15,13 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.bpr.front2.R;
-import com.bpr.front2.home.user.teacher.uploadPage.FileViewModel;
 import com.bpr.front2.home.user.teacher.uploadPage.UploadFileItem;
 
 import java.util.ArrayList;
 
 public class ResDetailFragment extends Fragment {
-    private FileViewModel fileVideModel;
     private RecyclerView uploadItemVIew;
     private SwipeRefreshLayout commentRefresh;
     private RecyclerView commentRecycler;
@@ -45,9 +43,7 @@ public class ResDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_res_detail, container, false);
-        fileVideModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
-                .get(FileViewModel.class);
-        fileItems = fileVideModel.getFileItem();
+
 
         uploadItemVIew = v.findViewById(R.id.upload_list_view);
         commentRecycler = v.findViewById(R.id.comment_recycler_view);

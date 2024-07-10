@@ -111,7 +111,8 @@
 
     <!-- upload -->
     <string name="upload_label_nav">Upload</string>
-    <string name="upload_imageName">Name (Default is filename)</string>
+    <string name="upload_imageName">Upload title</string>
+    <string name="upload_desc_hint">Write description here</string>
     <string name="upload_course">Course</string>
     <string name="upload_imageSize">Size</string>
     <string name="upload_local_title">Choose local file</string>
