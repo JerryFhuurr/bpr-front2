@@ -51,10 +51,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.RuntimePermissions;
 
-@RuntimePermissions
 public class UploadResFragment extends Fragment {
 
     private EditText fileTitleEdit;
@@ -100,12 +97,10 @@ public class UploadResFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("user", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "");
         getCourseList(username);
-        //TODO 等后端完成后添加上传的逻辑代码
 
         // open system file to choose file
         chooseVideoButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            @NeedsPermission("Manifest.permission.READ_EXTERNAL_STORAGE")
             public void onClick(View view) {
                 Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
                 //chooseFile.setType("*/*");//匹配所有的类型
@@ -300,7 +295,7 @@ public class UploadResFragment extends Fragment {
                         .post(multipartBody)
                         .build();
 
-                uploadButton.setText("Uploading...");
+                uploadButton.setText(R.string.upload_waiting_label);
                 uploadButton.setClickable(false);
 
                 try {

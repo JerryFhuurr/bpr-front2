@@ -51,7 +51,7 @@
                         android:layout_height="41dp"
                         android:gravity="center"
                         android:text="@string/upload_course"
-                        android:textSize="20dp"
+                        android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/course_name" />
 
@@ -75,7 +75,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Upload video"
+                        android:text="@string/upload_video_label"
                         android:textSize="35sp" />
 
                     <LinearLayout
@@ -94,7 +94,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:text="Choose video" />
+                            android:text="@string/upload_video_choose" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -107,7 +107,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Upload file (Optional)"
+                        android:text="@string/upload_file_label"
                         android:textSize="25sp" />
 
                     <LinearLayout
@@ -126,7 +126,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="2"
-                            android:text="Choose file" />
+                            android:text="@string/upload_video_choose" />
                     </LinearLayout>
                 </LinearLayout>
 

@@ -114,13 +114,9 @@
     <string name="upload_imageName">Upload title</string>
     <string name="upload_desc_hint">Write description here</string>
     <string name="upload_course">Course</string>
-    <string name="upload_imageSize">Size</string>
     <string name="upload_local_title">Choose local file</string>
     <string name="upload_camera_title">Take images from camera</string>
     <string name="upload_upload_title">Upload</string>
-    <string name="upload_permission">You have authorized</string>
-    <string name="upload_permission_ok">Get permission</string>
-    <string name="upload_permission_no">Cannot get permission</string>
     <string name="upload_failed">Upload failed, please check your settings</string>
     <string name="upload_success">Upload success</string>
     <string name="upload_file_error">Image too large !</string>
@@ -128,7 +124,10 @@
     <string name="upload_waiting_dialog_title">Uploading</string>
     <string name="upload_waiting_dialog_message">Please wait</string>
     <string name="upload_delete_file">Remove file</string>
-
+    <string name="upload_video_label">Upload video</string>
+    <string name="upload_video_choose">Choose</string>
+    <string name="upload_file_label">Upload file (Optional)</string>
+    <string name="upload_waiting_label">Uploading, please wait…</string>
     <string name="upload_edit">Edit</string>
     <string name="upload_delete">Remove</string>
 
