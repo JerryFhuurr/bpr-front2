@@ -4,13 +4,13 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +37,7 @@ import okhttp3.Response;
 
 public class VideoPlayerFragment extends Fragment {
     private TextView titleLabel;
+    private TextView warningLabel;
     private VideoView videoView;
     private Button downloadButton;
     private UploadItemVideoModel uploadItemVideoModel;
@@ -61,31 +62,46 @@ public class VideoPlayerFragment extends Fragment {
         titleLabel = v.findViewById(R.id.video_title);
         videoView = v.findViewById(R.id.detail_video_view);
         downloadButton = v.findViewById(R.id.download_video_button);
+        warningLabel = v.findViewById(R.id.warning_label);
 
-        setUpVideoPlayer();
+        if (!checkFile()) {
+            downloadVideo(2);
+        } else {
+            setUpPlayer();
+        }
 
+        titleLabel.setText(uploadItemVideoModel.getUploadItem().videoFileName);
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadVideo();
+                downloadVideo(1);
             }
         });
         return v;
     }
 
 
-    private void setUpVideoPlayer() {
-        String path = uploadItemVideoModel.getUploadItem().videoFileDownload;
-        Log.i(TAG, uploadItemVideoModel.getUploadItem().toString());
+    private Boolean checkFile() {
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo/"
+                + uploadItemVideoModel.getUploadItem().videoFileName + ".mp4";
+        File file = new File(path);
+        return file.exists();
+    }
+
+    private void setUpPlayer() {
+        Log.i(TAG, "try to set up player");
+        Toast.makeText(getContext(), "Laoding complete!", Toast.LENGTH_SHORT).show();
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo/"
+                + uploadItemVideoModel.getUploadItem().videoFileName + ".mp4";
         videoView.setVideoPath(path);
         MediaController mediaController = new MediaController(getContext());
         videoView.setMediaController(mediaController);
         videoView.requestFocus();
-
-        Log.i(TAG, "path:" + path);
+        warningLabel.setText("");
     }
 
-    private void downloadVideo() {
+
+    private void downloadVideo(int type) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -104,24 +120,37 @@ public class VideoPlayerFragment extends Fragment {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         InputStream inputStream = response.body().byteStream();
-                        final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download",
-                                uploadItemVideoModel.getUploadItem().videoFileName + ".mp4");
-                        Log.i(ContentValues.TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
-                        if (!file.exists()) {
-                            FileOutputStream outputStream = new FileOutputStream(file);
-                            int len = 0;
-                            byte[] bytes = new byte[1024 * 10];
-                            while ((len = inputStream.read(bytes)) != -1) {
-                                outputStream.write(bytes, 0, len);
-                            }
-                            inputStream.close();
-                            outputStream.close();
+                        File file = null;
+                        if (type == 1) {
+                            file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download",
+                                    uploadItemVideoModel.getUploadItem().videoFileName + ".mp4");
+                        } else if (type == 2) {
+                            warningLabel.setText("Loading video, please wait...");
+                            file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo",
+                                    uploadItemVideoModel.getUploadItem().videoFileName + ".mp4");
                         }
+                        Log.i(ContentValues.TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
+                        FileOutputStream outputStream = new FileOutputStream(file);
+                        int len = 0;
+                        byte[] bytes = new byte[1024 * 10];
+                        while ((len = inputStream.read(bytes)) != -1) {
+                            outputStream.write(bytes, 0, len);
+                        }
+                        Log.i(TAG, "file write ok");
+                        inputStream.close();
+                        outputStream.close();
+
 
                         requireActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getContext(), "Download OK", Toast.LENGTH_SHORT).show();
+                                if (type == 1) {
+                                    Toast.makeText(getContext(), "Download OK", Toast.LENGTH_SHORT).show();
+                                } else if (type == 2) {
+                                    setUpPlayer();
+                                    Thread.currentThread().interrupt();
+                                }
+
                             }
                         });
                     }

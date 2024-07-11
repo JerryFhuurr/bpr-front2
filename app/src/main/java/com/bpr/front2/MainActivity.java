@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createTempVideoPath();
         setContentView(R.layout.activity_main);
         checkUser();
         initView();
@@ -187,5 +190,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void createTempVideoPath() {
+        String cPackagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo";
+        File file = new File(cPackagePath);
+        if (!file.exists()) {
+            file.mkdir();
+        }
     }
 }
