@@ -151,9 +151,15 @@
     <string name="res_detail_label_nav">Detail</string>
     <string name="comment_title_label">Comment</string>
     <string name="comment_hint">Write comment here :-)</string>
-    <string name="comment_button">Commit comment</string>
+    <string name="comment_button">Post comment</string>
 
     <!-- admin -->
     <string name="add_account_label">Add account</string>
 
+    <!-- detail page -->
+    <string name="detail_video_label">Video</string>
+    <string name="detail_video_play_button">Play video</string>
+    <string name="detail_file_label">Other file</string>
+    <string name="detail_file_download_button">Download file</string>
+    <string name="detail_video_download">Download video</string>
 </resources>

@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
-import com.bpr.front2.home.user.teacher.uploadPage.UploadResFragment;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 
@@ -68,8 +67,8 @@ public class TeacherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         for (int i = 1; i <= 50; i++) {
             UploadItem item = new UploadItem();
-            item.id = i;
-            item.title = "Title " + i; // 设置标题，你可以根据需要修改
+            item.videoId = i;
+            item.videoTitle = "Title " + i; // 设置标题，你可以根据需要修改
             items.add(item);
         }
     }
@@ -159,8 +158,8 @@ public class TeacherFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject o = jsonArray.getJSONObject(i);
                         UploadItem item = new UploadItem();
-                        item.title = o.getString("videoTitle");
-                        item.id = o.getInt("videoId");
+                        item.videoTitle = o.getString("videoTitle");
+                        item.videoId = o.getInt("videoId");
                         items.add(item);
                     }
                     setRefreshView(userId);
@@ -182,7 +181,7 @@ public class TeacherFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 UploadItem uploadItem = items.get(position);
-                Toast.makeText(getContext(), uploadItem.title, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), uploadItem.videoTitle, Toast.LENGTH_SHORT).show();
             }
 
             @Override

@@ -29,6 +29,7 @@ import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.course.CourseItem;
 import com.bpr.front2.home.user.course.CourseViewModel;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
+import com.bpr.front2.home.user.teacher.uploads.UploadItemVideoModel;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 
 import org.json.JSONArray;
@@ -47,6 +48,7 @@ import okhttp3.Response;
 public class ResListFragment extends Fragment {
 
     private CourseViewModel courseViewModel;
+    private UploadItemVideoModel uploadItemVideoModel;
     private EditText searchEdit;
     private TextView courseNameLabel;
     private CourseItem courseItem;
@@ -75,7 +77,8 @@ public class ResListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_res_list, container, false);
         courseViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
                 .get(CourseViewModel.class);
-
+        uploadItemVideoModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
+                .get(UploadItemVideoModel.class);
         courseNameLabel = v.findViewById(R.id.list_course_name);
         courseItem = courseViewModel.getCourseItem();
         courseNameLabel.setText(courseItem.getCourseName());
@@ -119,8 +122,8 @@ public class ResListFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject o = jsonArray.getJSONObject(i);
                         UploadItem uploadItem = new UploadItem();
-                        uploadItem.id = o.getInt("videoId");
-                        uploadItem.title = o.getString("videoTitle");
+                        uploadItem.videoId = o.getInt("videoId");
+                        uploadItem.videoTitle = o.getString("videoTitle");
                         items.add(uploadItem);
                     }
                     Log.i(TAG, String.valueOf(items.size()));
@@ -145,7 +148,7 @@ public class ResListFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 UploadItem uploadItem = items.get(position);
-                // TODO 向detail页面传递标题
+                uploadItemVideoModel.setUploadItem(uploadItem);
                 NavHostFragment.findNavController(ResListFragment.this)
                         .navigate(R.id.action_resListFragment_to_resDetailFragment);
             }
