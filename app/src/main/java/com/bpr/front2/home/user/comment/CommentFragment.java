@@ -3,6 +3,8 @@ package com.bpr.front2.home.user.comment;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
@@ -31,14 +35,20 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CommentFragment extends Fragment {
 
+    private EditText commentInput;
+    private RatingBar ratingBar;
     private Button sendButton;
     private UploadItem uploadItem;
     private UploadItemVideoModel uploadItemVideoModel;
@@ -72,8 +82,17 @@ public class CommentFragment extends Fragment {
         refresh = v.findViewById(R.id.comment_refresh_view);
         commentR = v.findViewById(R.id.comment_recycler_view);
         sendButton = v.findViewById(R.id.commit_comment_button);
+        ratingBar = v.findViewById(R.id.comment_rating);
+        commentInput = v.findViewById(R.id.comment_edit);
 
         getComments(uploadItem.videoId);
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postComment();
+            }
+        });
         return v;
     }
 
@@ -156,6 +175,60 @@ public class CommentFragment extends Fragment {
                         refresh.setRefreshing(false);
                     }
                 }, 1000);
+            }
+        });
+    }
+
+    private void postComment() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                SharedPreferences s = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+                int userId = s.getInt("userId", 0);
+                Map map = new HashMap();
+                map.put("senderId", String.valueOf(userId));
+                map.put("videoId", String.valueOf(uploadItem.videoId));
+                map.put("commentText", commentInput.getText().toString().trim());
+                map.put("commentScore", String.valueOf(ratingBar.getRating()));
+                JSONObject jo = new JSONObject(map);
+                RequestBody requestBody = RequestBody.create(MediaType.parse(
+                        "application/json; charset=utf-8"
+                ), jo.toString());
+                Log.i(TAG, jo.toString());
+                String path = HttpUtils.baseUrl1 + "/comment/add";
+                Request request = new Request.Builder()
+                        .url(path)
+                        .post(requestBody)
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                        handlePostComment(responseBody, uploadItem.videoId);
+                    }
+                } catch (IOException e) {
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private void handlePostComment(final String response, final int videoId) {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (response.contains("added") || response.contains("updated")) {
+                    Toast.makeText(requireContext(), R.string.comment_upload_ok, Toast.LENGTH_SHORT).show();
+                    getComments(videoId);
+                } else {
+                    Toast.makeText(requireContext(), response, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Unexpected code " + response);
+                }
             }
         });
     }

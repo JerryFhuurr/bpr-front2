@@ -162,4 +162,7 @@
     <string name="detail_file_label">Other file</string>
     <string name="detail_file_download_button">Download file</string>
     <string name="detail_video_download">Download video</string>
+
+    <!-- comment -->
+    <string name="comment_upload_ok">Comment send!</string>
 </resources>

@@ -2,6 +2,7 @@ package com.bpr.front2.home.user.comment;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -15,11 +16,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bpr.front2.R;
+import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.course.CourseAdapter;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
@@ -61,7 +68,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                removeComment(comments.get(position));
             }
         });
     }
@@ -85,5 +92,31 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
     }
 
+
+    private void removeComment(Comment comment) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String url = HttpUtils.baseUrl1 + "/comment/remove?commentId=" + comment.getCommentId();
+                Request request = new Request.Builder().url(url).delete().build();
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(ContentValues.TAG, responseBody);
+                        if (responseBody.equals("Comment removed")) {
+                            Log.i(TAG, "comment remove");
+                            comments.remove(comment);
+
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
 
 }
