@@ -1,28 +1,19 @@
 package com.bpr.front2.home.user.course.resource;
 
-import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,29 +26,17 @@ import android.widget.Toast;
 
 import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
-import com.bpr.front2.home.user.comment.Comment;
-import com.bpr.front2.home.user.comment.CommentAdapter;
-import com.bpr.front2.home.user.course.CourseAdapter;
-import com.bpr.front2.home.user.course.CourseItem;
-import com.bpr.front2.home.user.teacher.uploadPage.UploadFileItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadItemVideoModel;
+import com.bpr.front2.login.LoginActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -77,7 +56,7 @@ public class ResDetailFragment extends Fragment {
     private Button playVideoButton;
     private Button downloadFileButton;
     private Button editButton;
-    private Button remvoeButton;
+    private Button removeButton;
     private Button commentButton;
     private UploadItem uploadItem;
     private UploadItemVideoModel uploadItemVideoModel;
@@ -109,7 +88,7 @@ public class ResDetailFragment extends Fragment {
         fileNameText = v.findViewById(R.id.file_title);
         downloadFileButton = v.findViewById(R.id.choose_file_button);
         editButton = v.findViewById(R.id.edit_title_button);
-        remvoeButton = v.findViewById(R.id.delete_video_button);
+        removeButton = v.findViewById(R.id.delete_video_button);
         commentButton = v.findViewById(R.id.go_to_comments);
 
         titleText.setInputType(EditorInfo.TYPE_NULL);
@@ -119,7 +98,7 @@ public class ResDetailFragment extends Fragment {
         String role = s.getString("role", "student");
         if (role.equals("student")) {
             editButton.setVisibility(View.GONE);
-            remvoeButton.setVisibility(View.GONE);
+            removeButton.setVisibility(View.GONE);
         }
 
         getVideoItem();
@@ -144,7 +123,7 @@ public class ResDetailFragment extends Fragment {
                 titleText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
                 descText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
 
-                remvoeButton.setVisibility(View.GONE);
+                removeButton.setVisibility(View.GONE);
                 editButton.setText("Apply changes");
 
                 editButton.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +140,22 @@ public class ResDetailFragment extends Fragment {
             }
         });
 
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder removeVideo = new AlertDialog.Builder(requireContext());
+                removeVideo.setTitle(R.string.detail_remove_dia_title);
+                removeVideo.setMessage(R.string.detail_remove_dia_content);
+                removeVideo.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        removeVideo();
+                    }
+                });
+                removeVideo.show();
+            }
+        });
+
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,8 +164,6 @@ public class ResDetailFragment extends Fragment {
             }
         });
 
-        // TODO 添加评论相关的adapter
-        // TODO 添加发布评论的代码
         return v;
     }
 
@@ -325,7 +318,7 @@ public class ResDetailFragment extends Fragment {
                         titleText.setInputType(EditorInfo.TYPE_NULL);
                         descText.setInputType(EditorInfo.TYPE_NULL);
 
-                        remvoeButton.setVisibility(View.VISIBLE);
+                        removeButton.setVisibility(View.VISIBLE);
                         editButton.setText(R.string.upload_edit);
                         getVideoItem();
                         Toast.makeText(getContext(), "Update applied", Toast.LENGTH_SHORT).show();
@@ -337,5 +330,38 @@ public class ResDetailFragment extends Fragment {
         });
     }
 
+    private void removeVideo() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String path = HttpUtils.baseUrl1 + "/video/remove?videoId=" + uploadItem.videoId;
+                Request request = new Request.Builder().url(path).delete().build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                        if (responseBody.contains("Successfully")) {
+                            requireActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), "Resource remove!", Toast.LENGTH_LONG).show();
+                                    NavHostFragment.findNavController(ResDetailFragment.this)
+                                            .navigate(R.id.action_resDetailFragment_to_teacherFragment);
+                                }
+                            });
+
+                        }
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(getContext(), "No Internet connect!", Toast.LENGTH_LONG).show();
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
 
 }

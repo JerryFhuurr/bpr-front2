@@ -162,6 +162,9 @@
     <string name="detail_file_label">Other file</string>
     <string name="detail_file_download_button">Download file</string>
     <string name="detail_video_download">Download video</string>
+    <string name="detail_remove_dia_title">Remove this video</string>
+    <string name="detail_remove_dia_content">Are you sure to remove this video?
+     Everything relates with this video will be removed also (include comments)</string>
 
     <!-- comment -->
     <string name="comment_upload_ok">Comment send!</string>

@@ -66,7 +66,7 @@ public class ResListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        courseItem = courseViewModel.getCourseItem();
     }
 
     @SuppressLint("MissingInflatedId")
@@ -80,7 +80,7 @@ public class ResListFragment extends Fragment {
         uploadItemVideoModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
                 .get(UploadItemVideoModel.class);
         courseNameLabel = v.findViewById(R.id.list_course_name);
-        courseItem = courseViewModel.getCourseItem();
+
         courseNameLabel.setText(courseItem.getCourseName());
         uploadsR = v.findViewById(R.id.uploads_recycle);
         refresh = v.findViewById(R.id.uploads_refresh);
