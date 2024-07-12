@@ -109,6 +109,9 @@
         <action
             android:id="@+id/action_resDetailFragment_to_teacherFragment"
             app:destination="@id/teacherFragment" />
+        <action
+            android:id="@+id/action_resDetailFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
     <fragment
         android:id="@+id/videoPlayerFragment"
@@ -148,5 +151,14 @@
         <action
             android:id="@+id/action_resetPasswordFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentFragment"
+        android:name="com.bpr.front2.home.user.comment.CommentFragment"
+        android:label="fragment_comment"
+        tools:layout="@layout/fragment_comment" >
+        <action
+            android:id="@+id/action_commentFragment_to_resDetailFragment"
+            app:destination="@id/resDetailFragment" />
     </fragment>
 </navigation>

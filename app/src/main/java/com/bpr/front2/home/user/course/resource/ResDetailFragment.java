@@ -14,10 +14,14 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,10 +35,15 @@ import android.widget.Toast;
 
 import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
+import com.bpr.front2.home.user.comment.Comment;
+import com.bpr.front2.home.user.comment.CommentAdapter;
+import com.bpr.front2.home.user.course.CourseAdapter;
+import com.bpr.front2.home.user.course.CourseItem;
 import com.bpr.front2.home.user.teacher.uploadPage.UploadFileItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadItemVideoModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,7 +54,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 import okhttp3.Call;
@@ -66,13 +78,10 @@ public class ResDetailFragment extends Fragment {
     private Button downloadFileButton;
     private Button editButton;
     private Button remvoeButton;
-    private SwipeRefreshLayout commentRefresh;
-    private RecyclerView commentRecycler;
-    private Button sendButton;
+    private Button commentButton;
     private UploadItem uploadItem;
     private UploadItemVideoModel uploadItemVideoModel;
 
-    ArrayList<UploadFileItem> fileItems = new ArrayList<>();
 
     public ResDetailFragment() {
         // Required empty public constructor
@@ -99,11 +108,9 @@ public class ResDetailFragment extends Fragment {
         playVideoButton = v.findViewById(R.id.choose_video_button);
         fileNameText = v.findViewById(R.id.file_title);
         downloadFileButton = v.findViewById(R.id.choose_file_button);
-        commentRecycler = v.findViewById(R.id.comment_recycler_view);
-        commentRefresh = v.findViewById(R.id.comment_refresh_view);
-        sendButton = v.findViewById(R.id.commit_comment_button);
         editButton = v.findViewById(R.id.edit_title_button);
         remvoeButton = v.findViewById(R.id.delete_video_button);
+        commentButton = v.findViewById(R.id.go_to_comments);
 
         titleText.setInputType(EditorInfo.TYPE_NULL);
         descText.setInputType(EditorInfo.TYPE_NULL);
@@ -153,6 +160,15 @@ public class ResDetailFragment extends Fragment {
                 });
             }
         });
+
+        commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(ResDetailFragment.this)
+                        .navigate(R.id.action_resDetailFragment_to_commentFragment);
+            }
+        });
+
         // TODO 添加评论相关的adapter
         // TODO 添加发布评论的代码
         return v;
@@ -320,5 +336,6 @@ public class ResDetailFragment extends Fragment {
             }
         });
     }
+
 
 }
