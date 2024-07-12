@@ -2,9 +2,11 @@ package com.bpr.front2.home.user.course.resource;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +23,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,18 +50,22 @@ import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ResDetailFragment extends Fragment {
-    private TextView titleText;
+    private EditText titleText;
     private TextView rateText;
-    private TextView descText;
+    private EditText descText;
     private TextView videoNameText;
     private TextView fileNameText;
     private Button playVideoButton;
     private Button downloadFileButton;
+    private Button editButton;
+    private Button remvoeButton;
     private SwipeRefreshLayout commentRefresh;
     private RecyclerView commentRecycler;
     private Button sendButton;
@@ -94,6 +102,18 @@ public class ResDetailFragment extends Fragment {
         commentRecycler = v.findViewById(R.id.comment_recycler_view);
         commentRefresh = v.findViewById(R.id.comment_refresh_view);
         sendButton = v.findViewById(R.id.commit_comment_button);
+        editButton = v.findViewById(R.id.edit_title_button);
+        remvoeButton = v.findViewById(R.id.delete_video_button);
+
+        titleText.setInputType(EditorInfo.TYPE_NULL);
+        descText.setInputType(EditorInfo.TYPE_NULL);
+
+        SharedPreferences s = requireActivity().getSharedPreferences("user",MODE_PRIVATE);
+        String role = s.getString("role", "student");
+        if (role.equals("student")) {
+            editButton.setVisibility(View.GONE);
+            remvoeButton.setVisibility(View.GONE);
+        }
 
         getVideoItem();
         downloadFileButton.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +128,29 @@ public class ResDetailFragment extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(ResDetailFragment.this)
                         .navigate(R.id.action_resDetailFragment_to_videoPlayerFragment);
+            }
+        });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                titleText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+                descText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
+
+                remvoeButton.setVisibility(View.GONE);
+                editButton.setText("Apply changes");
+
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String titleNew = titleText.getText().toString().trim();
+                        String descNew = descText.getText().toString().trim();
+                        if (titleNew.equals("")) {
+                            titleNew = uploadItem.videoTitle;
+                        }
+                        uploadChange(titleNew, descNew);
+                    }
+                });
             }
         });
         // TODO 添加评论相关的adapter
@@ -227,5 +270,55 @@ public class ResDetailFragment extends Fragment {
         }).start();
     }
 
+    private void uploadChange(String title, String desc) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                String url = HttpUtils.baseUrl1 + "/video/update/info";
+                RequestBody body = new FormBody.Builder()
+                        .add("videoId", String.valueOf(uploadItem.videoId))
+                        .add("userId", String.valueOf(uploadItem.userId))
+                        .add("videoTitle", title)
+                        .add("videoDescription", desc)
+                        .build();
+
+                Request request = new Request.Builder().url(url).put(body).build();
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                        handleUpdateResponse(responseBody);
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(getContext(), "No Internet connect!", Toast.LENGTH_LONG).show();
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private void handleUpdateResponse(final String response) {
+        requireActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (response.contains("Successfully")) {
+                        titleText.setInputType(EditorInfo.TYPE_NULL);
+                        descText.setInputType(EditorInfo.TYPE_NULL);
+
+                        remvoeButton.setVisibility(View.VISIBLE);
+                        editButton.setText(R.string.upload_edit);
+                        getVideoItem();
+                        Toast.makeText(getContext(), "Update applied", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                }
+            }
+        });
+    }
 
 }

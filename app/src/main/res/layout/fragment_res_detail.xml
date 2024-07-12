@@ -9,12 +9,18 @@
     android:orientation="vertical"
     tools:context=".home.user.course.resource.ResDetailFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </ScrollView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <EditText
             android:id="@+id/res_title_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,11 +36,12 @@
             android:textColor="@color/orange" />
     </LinearLayout>
 
-    <TextView
+    <EditText
         android:id="@+id/res_desc_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginVertical="8dp"
+        android:lines="3"
         android:textSize="20sp" />
 
     <LinearLayout

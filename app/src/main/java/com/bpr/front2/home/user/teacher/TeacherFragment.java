@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,7 +27,9 @@ import android.widget.Toast;
 
 import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
+import com.bpr.front2.home.user.course.resource.ResListFragment;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
+import com.bpr.front2.home.user.teacher.uploads.UploadItemVideoModel;
 import com.bpr.front2.home.user.teacher.uploads.UploadsAdapter;
 
 import org.json.JSONArray;
@@ -53,6 +56,7 @@ public class TeacherFragment extends Fragment {
     private Button uploadButton;
     private UploadsAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private UploadItemVideoModel uploadItemVideoModel;
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     ArrayList<UploadItem> items = new ArrayList<>();
@@ -85,6 +89,8 @@ public class TeacherFragment extends Fragment {
         openAccountButton = v.findViewById(R.id.manage_account_button);
         uploadButton = v.findViewById(R.id.upload_resources_button);
         layoutManager = new LinearLayoutManager(getContext());
+        uploadItemVideoModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
+                .get(UploadItemVideoModel.class);
 
         sharedPreferences = requireActivity().getSharedPreferences("user", MODE_PRIVATE);
         userRoleGet = sharedPreferences.getString("role", "student");
@@ -181,6 +187,9 @@ public class TeacherFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 UploadItem uploadItem = items.get(position);
+                uploadItemVideoModel.setUploadItem(uploadItem);
+                NavHostFragment.findNavController(TeacherFragment.this)
+                        .navigate(R.id.action_teacherFragment_to_resDetailFragment);
                 Toast.makeText(getContext(), uploadItem.videoTitle, Toast.LENGTH_SHORT).show();
             }
 

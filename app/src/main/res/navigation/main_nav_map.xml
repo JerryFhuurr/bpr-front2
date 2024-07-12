@@ -70,6 +70,9 @@
         <action
             android:id="@+id/action_teacherFragment_to_manageAccountFragment"
             app:destination="@id/manageAccountFragment" />
+        <action
+            android:id="@+id/action_teacherFragment_to_resDetailFragment"
+            app:destination="@id/resDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/uploadResFragment"
@@ -103,6 +106,9 @@
         <action
             android:id="@+id/action_resDetailFragment_to_videoPlayerFragment"
             app:destination="@id/videoPlayerFragment" />
+        <action
+            android:id="@+id/action_resDetailFragment_to_teacherFragment"
+            app:destination="@id/teacherFragment" />
     </fragment>
     <fragment
         android:id="@+id/videoPlayerFragment"
