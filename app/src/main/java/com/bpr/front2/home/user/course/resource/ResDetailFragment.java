@@ -37,11 +37,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -202,6 +205,7 @@ public class ResDetailFragment extends Fragment {
                     uploadItem.videoId = o.getInt("videoId");
                     uploadItem.courseId = o.getInt("courseId");
                     uploadItem.userId = o.getInt("userId");
+                    uploadItem.roleId = o.getInt("roleId");
                     uploadItem.videoScore = o.getInt("videoScore");
                     uploadItem.videoDescription = o.getString("videoDescription");
                     uploadItem.videoPath = o.getString("videoPath");
@@ -230,6 +234,10 @@ public class ResDetailFragment extends Fragment {
             fileNameText.setText("No file");
             downloadFileButton.setVisibility(View.GONE);
         }
+
+        SharedPreferences s = requireActivity().getSharedPreferences("user",MODE_PRIVATE);
+        int id = s.getInt("userId", 0);
+        addHistory(id);
     }
 
     private void downloadFile() {
@@ -358,6 +366,43 @@ public class ResDetailFragment extends Fragment {
                     }
                 } catch (IOException e) {
                     Toast.makeText(getContext(), "No Internet connect!", Toast.LENGTH_LONG).show();
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private void addHistory(int watcherId) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                Map map = new HashMap();
+                map.put("userId", uploadItem.userId);
+                map.put("courseId", uploadItem.courseId);
+                map.put("videoId", uploadItem.videoId);
+                map.put("roleId", uploadItem.roleId);
+                map.put("watcherId", watcherId);
+                JSONObject jo = new JSONObject(map);
+                RequestBody requestBody = RequestBody.create(MediaType.parse(
+                        "application/json; charset=utf-8"
+                ), jo.toString());
+                Log.i(TAG, "req: " + jo.toString());
+                String path = HttpUtils.baseUrl1 + "/history/add";
+                Request request = new Request.Builder()
+                        .url(path)
+                        .post(requestBody)
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+                    }
+                } catch (IOException e) {
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
                     throw new RuntimeException(e);
                 }
             }
