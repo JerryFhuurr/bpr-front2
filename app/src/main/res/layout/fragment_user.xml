@@ -62,6 +62,16 @@
                     android:drawableLeft="@drawable/account_icon"
                     android:drawableRight="@drawable/next_icon" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp" />
+
+                <Button
+                    android:id="@+id/history_button"
+                    android:text="@string/user_item6"
+                    style="@style/user_button_style"
+                    android:drawableLeft="@drawable/history_icon"
+                    android:drawableRight="@drawable/next_icon" />
 
                 <View
                     android:layout_width="match_parent"

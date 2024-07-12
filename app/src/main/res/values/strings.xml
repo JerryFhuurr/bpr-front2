@@ -60,6 +60,7 @@
     <!-- User -->
     <string name="user_title">Settings</string>
     <string name="user_item1">Account</string>
+    <string name="user_item6">History</string>
     <string name="user_item2">About</string>
     <string name="user_item3">General</string>
     <string name="user_item4">Logout</string>

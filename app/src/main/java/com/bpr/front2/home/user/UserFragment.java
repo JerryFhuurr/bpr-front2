@@ -23,6 +23,7 @@ public class UserFragment extends Fragment {
     private TextView userNameText;
     private Button account;
     private Button about;
+    private Button history;
     private Button cache;
     private Button settings;
     private ImageView iconView;
@@ -50,6 +51,7 @@ public class UserFragment extends Fragment {
         about = v.findViewById(R.id.user_about);
         settings = v.findViewById(R.id.user_settings);
         userNameText = v.findViewById(R.id.user_name);
+        history = v.findViewById(R.id.history_button);
 
         userNameText.setText(sharedPreferences.getString("username", ""));
 
