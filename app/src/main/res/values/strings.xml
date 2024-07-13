@@ -156,6 +156,9 @@
 
     <!-- admin -->
     <string name="add_account_label">Add account</string>
+    <string name="change_account_label">Change password</string>
+    <string name="account_remove_title">Remove account</string>
+    <string name="account_remove_alert">Alert! You are trying to remove an account, are you sure??</string>
 
     <!-- detail page -->
     <string name="detail_video_label">Video</string>
