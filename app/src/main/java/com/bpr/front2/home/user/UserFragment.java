@@ -69,6 +69,13 @@ public class UserFragment extends Fragment {
             }
         });
 
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(UserFragment.this).navigate(R.id.action_userFragment_to_historyFragment);
+            }
+        });
+
         return v;
     }
 }
