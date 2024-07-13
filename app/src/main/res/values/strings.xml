@@ -43,6 +43,10 @@
     <string name="register_password_hint">At least 6 characters</string>
     <string name="register_username_hint">Username</string>
     <string name="register_email_occupied">The email address is already in use by another account.</string>
+    <string name="register_course_button">Select courses</string>
+    <string name="register_course_error">Please choose a course for user!</string>
+    <string name="register_role_button">Select role</string>
+    <string name="register_role_error">Please choose a role for user!</string>
 
     <!-- home -->
     <string name="home_title">Home</string>

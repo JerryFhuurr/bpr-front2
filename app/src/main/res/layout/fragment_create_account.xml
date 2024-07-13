@@ -72,6 +72,26 @@
                 android:singleLine="true"
                 tools:ignore="SpeakableTextPresentCheck" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <Button
+                android:id="@+id/open_course_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/register_course_button" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <Button
+                android:id="@+id/open_role_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/register_role_button" />
+
         </LinearLayout>
 
         <TextView
