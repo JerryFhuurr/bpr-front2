@@ -2,28 +2,44 @@ package com.bpr.front2.home.user.teacher.admin.account;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.course.CourseAdapter;
+import com.bpr.front2.home.user.teacher.admin.CreateAccountFragment;
+import com.bpr.front2.login.LoginActivity;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
+import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHolder>{
@@ -62,6 +78,36 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
                 });
                 remove.show();
                 removeAccount(accounts.get(position));
+            }
+        });
+
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder resetPassword = new AlertDialog.Builder(view.getContext());
+                final View dialogView = LayoutInflater.from(view.getContext())
+                        .inflate(R.layout.dialog_with_edittext,null);
+                resetPassword.setTitle(R.string.login_reset_title);
+                resetPassword.setView(dialogView);
+                resetPassword.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
+                        EditText passInput = (EditText) dialogView.findViewById(R.id.pass_input);
+                        @SuppressLint({"MissingInflatedId", "LocalSuppress"})
+                        TextView passError = dialogView.findViewById(R.id.pass_error);
+                        String password = passInput.getText().toString().trim();
+                        SharedPreferences s = view.getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
+                        String role = s.getString("role", "");
+                        String username = accounts.get(position).getUsername();
+
+                        if (password.length() < 6) {
+                            passError.setText(R.string.register_password_hint);
+                        }
+                        updatePassword(role, username, password);
+                    }
+                });
+                resetPassword.show();
             }
         });
     }
@@ -109,4 +155,41 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.ViewHold
             }
         }).start();
     }
+
+    private void updatePassword(String role, String username, String password) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                if (role.equals("admin")) {
+                    String url = HttpUtils.baseUrl1 + "/user/update/password/admin";
+                    FormBody.Builder requestBuild = new FormBody.Builder();
+                    RequestBody requestBody = requestBuild
+                            .add("username", username)
+                            .add("password", password)
+                            .build();
+                    Request request = new Request.Builder()
+                            .url(url)
+                            .put(requestBody)
+                            .build();
+                    try {
+                        Response response = client.newCall(request).execute();
+
+                        if (response.isSuccessful()) {
+                            String responseBody = response.body().string();
+                            Log.i(ContentValues.TAG, responseBody);
+
+                            if (responseBody.contains("successfully")) {
+                                Log.i(TAG, "password update");
+                            }
+                        }
+                    } catch (IOException e) {
+                        Log.w(ContentValues.TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }).start();
+    }
+
 }

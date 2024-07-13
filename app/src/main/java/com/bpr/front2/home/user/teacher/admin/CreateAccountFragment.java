@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.annotation.Native;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -210,6 +212,7 @@ public class CreateAccountFragment extends Fragment {
                                         }
                                     }
                                     int result[] = Arrays.copyOf(newArr, x);
+                                    createButton.setText("Updating, please wait");
                                     addUser(result, usernameGet, password, role);
                                 }
 
@@ -313,6 +316,8 @@ public class CreateAccountFragment extends Fragment {
             public void run() {
                 if (response.contains("successfully")) {
                     Toast.makeText(requireContext(), R.string.account_setOK, Toast.LENGTH_SHORT).show();
+                    NavHostFragment.findNavController(CreateAccountFragment.this)
+                            .navigate(R.id.action_createAccountFragment_to_manageAccountFragment);
                 } else {
                     errorLabel.setText(response);
                     Log.d(TAG, "Unexpected code " + response);
