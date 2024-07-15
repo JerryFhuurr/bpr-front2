@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -149,14 +150,21 @@ public class UploadResFragment extends Fragment {
                 path = UriUtils.getFileAbsolutePath(getContext(), uri);
                 File file = new File(path);
                 Log.i(TAG, "path:" + path);
-                if (path.endsWith(".mp4") || path.endsWith(".avi")) {
-                    videoTitleText.setText(file.getName());
-                    checkFileList(1);
+
+                long fileSize = file.length();
+                if (fileSize > 524288000l) {
+                    Toast.makeText(requireContext(), R.string.e_file_size, Toast.LENGTH_SHORT).show();
                 } else {
-                    fileTitleText.setText(file.getName());
-                    checkFileList(2);
+                    if (path.endsWith(".mp4") || path.endsWith(".avi")) {
+                        videoTitleText.setText(file.getName());
+                        checkFileList(1);
+                    } else {
+                        fileTitleText.setText(file.getName());
+                        checkFileList(2);
+                    }
+                    filesUpload.add(file);
                 }
-                filesUpload.add(file);
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -210,7 +218,11 @@ public class UploadResFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
                 String url = HttpUtils.baseUrl1 + "/course/get/user?username=" + username;
                 Request request = new Request.Builder().url(url).get().build();
                 try {
@@ -222,7 +234,12 @@ public class UploadResFragment extends Fragment {
                         setCourseList(responseBody);
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                    Looper.prepare();
+                    Toast.makeText(getContext(), "Internet error, please check your connection"
+                            , Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();
@@ -256,7 +273,12 @@ public class UploadResFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
+                        .writeTimeout(15, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
                 MultipartBody multipartBody;
                 if (filesUpload.size() == 1) {
                     multipartBody = new MultipartBody.Builder()
@@ -307,9 +329,12 @@ public class UploadResFragment extends Fragment {
                         getUploadResult(responseBody);
                     }
                 } catch (IOException e) {
-                    Looper.loop();
                     Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
-                    throw new RuntimeException(e);
+                    Looper.prepare();
+                    Toast.makeText(getContext(), "Internet error, please check your connection"
+                            , Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();

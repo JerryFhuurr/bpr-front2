@@ -179,4 +179,5 @@
 
     <!-- errors -->
     <string name="e_login_timeout">Timeout, please check your network connection</string>
+    <string name="e_file_size">Sorry, this APP only supports file within 500MB</string>
 </resources>

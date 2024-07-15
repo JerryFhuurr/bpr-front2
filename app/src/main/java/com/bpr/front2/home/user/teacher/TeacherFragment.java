@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -136,7 +137,11 @@ public class TeacherFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
                 String url = HttpUtils.baseUrl1 + "/video/get/list/user?userId=" + userId;
                 Request request = new Request.Builder().url(url).get().build();
                 try {
@@ -148,7 +153,12 @@ public class TeacherFragment extends Fragment {
                         setResList(responseBody, userId);
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                    Looper.prepare();
+                    Toast.makeText(getContext(), "Internet error, please check your connection"
+                            , Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();

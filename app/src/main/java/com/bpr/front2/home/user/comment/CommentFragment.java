@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -90,6 +91,7 @@ public class CommentFragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 postComment();
             }
         });
@@ -101,7 +103,11 @@ public class CommentFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
                 String url = HttpUtils.baseUrl1 + "/comment/get/all?videoId=" + videoId;
                 Request request = new Request.Builder().url(url).get().build();
 
@@ -114,8 +120,12 @@ public class CommentFragment extends Fragment {
                         setCommentList(responseBody);
                     }
                 } catch (IOException e) {
-                    Toast.makeText(getContext(), "No Internet connect!", Toast.LENGTH_LONG).show();
-                    throw new RuntimeException(e);
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                    Looper.prepare();
+                    Toast.makeText(getContext(), "Internet error, please check your connection"
+                            , Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();
@@ -183,7 +193,12 @@ public class CommentFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
+                        .writeTimeout(5, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
                 SharedPreferences s = getContext().getSharedPreferences("user", Context.MODE_PRIVATE);
                 int userId = s.getInt("userId", 0);
                 Map map = new HashMap();
@@ -212,7 +227,11 @@ public class CommentFragment extends Fragment {
                     }
                 } catch (IOException e) {
                     Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
-                    throw new RuntimeException(e);
+                    Looper.prepare();
+                    Toast.makeText(getContext(), "Internet error, please check your connection"
+                            , Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();
