@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +27,15 @@ import com.bpr.front2.handler.HttpUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -135,7 +139,12 @@ public class AccountFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
+
                 String url = HttpUtils.baseUrl1 + "/user/getinfo?username=" + username;
                 Request request = new Request.Builder().url(url).get().build();
                 try {
@@ -147,7 +156,10 @@ public class AccountFragment extends Fragment {
                         setUserInfo(responseBody);
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Looper.prepare();
+                    Toast.makeText(getContext(), "No Internet connect!", Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();
@@ -182,7 +194,12 @@ public class AccountFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
                 Map map = new HashMap();
                 map.put("userId", String.valueOf(id));
                 map.put("username", username);
@@ -210,7 +227,11 @@ public class AccountFragment extends Fragment {
                     }
                 } catch (IOException e) {
                     Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
-                    throw new RuntimeException(e);
+                    Looper.prepare();
+                    Toast.makeText(getContext(), "Internet error, please check your connection"
+                            , Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();

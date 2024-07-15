@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
 
 import java.io.IOException;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -83,7 +86,11 @@ public class ResetPasswordFragment extends Fragment {
             public void run() {
                 SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("user", MODE_PRIVATE);
                 String username = sharedPreferences.getString("username", "");
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .build();
                 String url = HttpUtils.baseUrl1 + "/user/update/password";
                 FormBody.Builder requestBuild = new FormBody.Builder();
                 RequestBody requestBody = requestBuild
@@ -105,7 +112,12 @@ public class ResetPasswordFragment extends Fragment {
                         changePassword(responseBody);
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));
+                    Looper.prepare();
+                    Toast.makeText(getContext(), "Internet error, please check your connection"
+                            , Toast.LENGTH_LONG).show();
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();

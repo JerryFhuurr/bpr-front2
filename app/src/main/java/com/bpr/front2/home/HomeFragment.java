@@ -38,11 +38,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -100,6 +102,7 @@ public class HomeFragment extends Fragment {
                         .connectTimeout(15, TimeUnit.SECONDS)
                         .readTimeout(10, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
+                        .cache(new Cache(new File("/local/studycache"), 10 * 1024 * 1024))
                         .build();
 
                 String url = HttpUtils.baseUrl1 + "/course/get/user?username=" + username;
@@ -135,6 +138,10 @@ public class HomeFragment extends Fragment {
                         courseItem.setId(o.getInt("courseId"));
                         courseItem.setCourseName(o.getString("courseName"));
                         items.add(courseItem);
+                    }
+
+                    if (items.size() == 0) {
+                        Toast.makeText(getContext(), "No course found, please contact admin", Toast.LENGTH_SHORT).show();
                     }
                     Log.i(TAG, String.valueOf(items.size()));
                     setRecyclerLayout(username);
