@@ -1,5 +1,7 @@
 package com.bpr.front2.handler;
 
+import java.util.regex.Pattern;
+
 public class GeneralUtils {
 
 
@@ -14,5 +16,13 @@ public class GeneralUtils {
             default:
                 return 0;
         }
+    }
+
+    public static boolean isValidEmail(String email) {
+        if (email == null || email.length() < 1 || email.length() > 256) {
+            return false;
+        }
+        String pattern = "^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}$";
+        return Pattern.matches(pattern, email);
     }
 }

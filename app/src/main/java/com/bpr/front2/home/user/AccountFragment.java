@@ -4,9 +4,11 @@ import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -22,7 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
+import com.bpr.front2.handler.GeneralUtils;
 import com.bpr.front2.handler.HttpUtils;
+import com.bpr.front2.login.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,7 +91,21 @@ public class AccountFragment extends Fragment {
                 String phone = phoneEdit.getText().toString().trim();
                 String birth = birthdayText.getText().toString().trim();
 
-                saveChangeRequest(username, email, phone, birth);
+                if (!GeneralUtils.isValidEmail(email)) {
+                    AlertDialog.Builder emailAlert = new AlertDialog.Builder(requireContext());
+                    emailAlert.setTitle("Email");
+                    emailAlert.setMessage("Please enter valid email address!");
+                    emailAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    emailAlert.show();
+                } else {
+                    saveChangeRequest(username, email, phone, birth);
+                }
+
             }
         });
 
@@ -249,7 +267,16 @@ public class AccountFragment extends Fragment {
                     editor.apply();
                     Toast.makeText(requireContext(), R.string.account_setOK, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(requireContext(), response, Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder putFail = new AlertDialog.Builder(requireContext());
+                    putFail.setTitle("Failed");
+                    putFail.setMessage(response);
+                    putFail.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    putFail.show();
                     Log.d(TAG, "Unexpected code " + response);
                 }
             }
