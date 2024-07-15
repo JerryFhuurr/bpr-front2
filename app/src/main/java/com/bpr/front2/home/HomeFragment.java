@@ -81,8 +81,6 @@ public class HomeFragment extends Fragment {
         courseR = v.findViewById(R.id.home_course_recycle);
         refresh = v.findViewById(R.id.home_course_refresh);
 
-        int itemsSize = items.size();
-
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("user", MODE_PRIVATE);
         String usernameGet = sharedPreferences.getString("username", "null");
         usernameLabel.setText(usernameGet);
@@ -163,7 +161,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 CourseItem uploadItem = items.get(position);
-                Toast.makeText(getContext(), uploadItem.getCourseName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), uploadItem.getCourseName(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "item:" + uploadItem.getCourseName());
                 courseViewModel.setCourseItem(uploadItem);
                 NavHostFragment.findNavController(HomeFragment.this).navigate(R.id.action_homeFragment_to_resListFragment);
             }

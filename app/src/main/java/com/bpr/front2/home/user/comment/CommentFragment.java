@@ -15,6 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
@@ -51,6 +54,8 @@ public class CommentFragment extends Fragment {
     private EditText commentInput;
     private RatingBar ratingBar;
     private Button sendButton;
+    private TextView wordNumText;
+
     private UploadItem uploadItem;
     private UploadItemVideoModel uploadItemVideoModel;
 
@@ -85,13 +90,46 @@ public class CommentFragment extends Fragment {
         sendButton = v.findViewById(R.id.commit_comment_button);
         ratingBar = v.findViewById(R.id.comment_rating);
         commentInput = v.findViewById(R.id.comment_edit);
+        wordNumText = v.findViewById(R.id.text_size_label);
+
+        wordNumText.setText("200 words left");
 
         getComments(uploadItem.videoId);
+
+        commentInput.addTextChangedListener(new TextWatcher() {
+            private CharSequence wordNum; // number of words
+            private int selectionStart;
+            private int selectionEnd;
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                wordNum = charSequence; // record number of word
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int number = 200 - editable.length();
+                //TextView显示剩余字数
+                wordNumText.setText(number + " words left");
+                selectionStart=commentInput.getSelectionStart();
+                selectionEnd = commentInput.getSelectionEnd();
+                if (wordNum.length() > 200) {
+                    wordNumText.setText(editable.length() + "/200 words");
+                    wordNumText.setTextColor(getResources().getColor(R.color.red));
+                    sendButton.setText("Too much words entered !!");
+                    sendButton.setClickable(false);
+                }
+            }
+        });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 postComment();
             }
         });

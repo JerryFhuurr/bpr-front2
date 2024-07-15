@@ -24,6 +24,13 @@
         android:lines="3"
         android:inputType="textMultiLine" />
 
+    <TextView
+        android:id="@+id/text_size_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp" />
+
     <RatingBar
         android:id="@+id/comment_rating"
         android:layout_width="wrap_content"

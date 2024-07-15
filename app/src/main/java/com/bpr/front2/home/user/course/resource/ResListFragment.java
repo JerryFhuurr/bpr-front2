@@ -68,6 +68,8 @@ public class ResListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        courseViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
+                .get(CourseViewModel.class);
         courseItem = courseViewModel.getCourseItem();
     }
 
@@ -77,8 +79,7 @@ public class ResListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_res_list, container, false);
-        courseViewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
-                .get(CourseViewModel.class);
+
         uploadItemVideoModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.NewInstanceFactory())
                 .get(UploadItemVideoModel.class);
         courseNameLabel = v.findViewById(R.id.list_course_name);
