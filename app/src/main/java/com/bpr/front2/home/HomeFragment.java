@@ -107,8 +107,10 @@ public class HomeFragment extends Fragment {
                         setCourseList(responseBody, username);
                     }
                 } catch (IOException e) {
+                    Looper.prepare();
                     Toast.makeText(getContext(), "No Internet connect!", Toast.LENGTH_LONG).show();
-                    throw new RuntimeException(e);
+                    Looper.loop();
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();

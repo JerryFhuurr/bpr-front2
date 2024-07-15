@@ -27,6 +27,7 @@ import com.bpr.front2.handler.ActivityManager;
 import com.bpr.front2.handler.HttpUtils;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -129,20 +130,33 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient().newBuilder()
+                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .build();
                 String url = HttpUtils.baseUrl1 + "/user/login?username=" + username + "&password=" + password;
 
                 Request request = new Request.Builder().url(url).get().build();
                 try {
                     Response response = client.newCall(request).execute();
-
+                    Log.i(TAG, "response:"+response.isSuccessful());
                     if (response.isSuccessful()) {
                         String responseBody = response.body().string();
                         Log.i(TAG, responseBody);
                         loginShowResponse(responseBody, username);
+                    } else {
+                        String responseBody = response.body().string();
+                        Log.i(TAG, responseBody);
+
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    Log.w(TAG, e.getLocalizedMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            errorLabel.setText(R.string.e_login_timeout);
+                        }
+                    });
+                    //throw new RuntimeException(e);
                 }
             }
         }).start();

@@ -176,4 +176,7 @@
 
     <!-- comment -->
     <string name="comment_upload_ok">Comment send!</string>
+
+    <!-- errors -->
+    <string name="e_login_timeout">Timeout, please check your network connection</string>
 </resources>
