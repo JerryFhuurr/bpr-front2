@@ -119,7 +119,7 @@
     <fragment
         android:id="@+id/videoPlayerFragment"
         android:name="com.bpr.front2.home.user.course.resource.VideoPlayerFragment"
-        android:label="fragment_video_player"
+        android:label="@string/player_title"
         tools:layout="@layout/fragment_video_player" >
         <action
             android:id="@+id/action_videoPlayerFragment_to_resDetailFragment"
@@ -128,7 +128,7 @@
     <fragment
         android:id="@+id/manageAccountFragment"
         android:name="com.bpr.front2.home.user.teacher.admin.ManageAccountFragment"
-        android:label="fragment_manage_account"
+        android:label="@string/manage_title"
         tools:layout="@layout/fragment_manage_account" >
         <action
             android:id="@+id/action_manageAccountFragment_to_teacherFragment"
@@ -140,7 +140,7 @@
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="com.bpr.front2.home.user.teacher.admin.CreateAccountFragment"
-        android:label="fragment_create_account"
+        android:label="@string/register_title"
         tools:layout="@layout/fragment_create_account" >
         <action
             android:id="@+id/action_createAccountFragment_to_manageAccountFragment"
@@ -149,7 +149,7 @@
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="com.bpr.front2.home.user.ResetPasswordFragment"
-        android:label="fragment_reset_password"
+        android:label=""
         tools:layout="@layout/fragment_reset_password" >
         <action
             android:id="@+id/action_resetPasswordFragment_to_accountFragment"
@@ -158,7 +158,7 @@
     <fragment
         android:id="@+id/commentFragment"
         android:name="com.bpr.front2.home.user.comment.CommentFragment"
-        android:label="fragment_comment"
+        android:label="Comment"
         tools:layout="@layout/fragment_comment" >
         <action
             android:id="@+id/action_commentFragment_to_resDetailFragment"
@@ -167,7 +167,7 @@
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.bpr.front2.home.user.history.HistoryFragment"
-        android:label="fragment_history"
+        android:label="@string/user_item6"
         tools:layout="@layout/fragment_history" >
         <action
             android:id="@+id/action_historyFragment_to_userFragment"
@@ -176,7 +176,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.bpr.front2.home.SettingsFragment"
-        android:label="SettingsFragment" >
+        android:label="Settings" >
         <action
             android:id="@+id/action_settingsFragment_to_userFragment"
             app:destination="@id/userFragment" />

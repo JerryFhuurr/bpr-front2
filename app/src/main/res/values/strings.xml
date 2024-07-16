@@ -56,10 +56,6 @@
     <!-- both home and login -->
     <string name="exit_toast">Press again to exit the program</string>
 
-    <!-- filter -->
-    <string name="filter_text">Filter</string>
-    <string name="filter_1">Old to new</string>
-    <string name="filter_2">New to old</string>
 
     <!-- User -->
     <string name="user_title">Other Settings</string>
@@ -141,16 +137,6 @@
     <string name="upload_delete">Remove</string>
     <string name="uploads_list_title">My uploads</string>
 
-    <!-- pop menu -->
-    <string name="pop_save">Save image</string>
-    <string name="pop_share">Share</string>
-
-    <!-- cache -->
-    <string name="cache_title">Cache size is </string>
-    <string name="cache_message">This is will take more time when loading images, are you sure?</string>
-    <string name="cache_cancel">Not now</string>
-    <string name="cache_OK">Cache cleaned.</string>
-
     <!-- mine -->
     <string name="manage_admin_label">Manage accounts(Only for admin)</string>
     <string name="manage_button_label">Open</string>
@@ -162,12 +148,14 @@
     <string name="comment_title_label">Comment</string>
     <string name="comment_hint">Write comment here :-)</string>
     <string name="comment_button">Post comment</string>
+    <string name="player_title">Player</string>
 
     <!-- admin -->
     <string name="add_account_label">Add account</string>
     <string name="change_account_label">Change password</string>
     <string name="account_remove_title">Remove account</string>
     <string name="account_remove_alert">Alert! You are trying to remove an account, are you sure??</string>
+    <string name="manage_title">Manage accounts</string>
 
     <!-- detail page -->
     <string name="detail_video_label">Video</string>
