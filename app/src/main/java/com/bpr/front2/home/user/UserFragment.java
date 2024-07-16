@@ -2,6 +2,8 @@ package com.bpr.front2.home.user;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +20,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bpr.front2.R;
+import com.bpr.front2.handler.GeneralUtils;
 
 public class UserFragment extends Fragment {
 
-    private TextView userNameText;
+    private TextView userNameText, welcomeBackText;
     private Button account;
     private Button about;
     private Button history;
@@ -47,6 +51,7 @@ public class UserFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_user, container, false);
         iconView = v.findViewById(R.id.user_userIcon);
 
+        welcomeBackText = v.findViewById(R.id.welcome_back_label);
         account = v.findViewById(R.id.user_account);
         about = v.findViewById(R.id.user_about);
         settings = v.findViewById(R.id.user_settings);
@@ -54,6 +59,21 @@ public class UserFragment extends Fragment {
         history = v.findViewById(R.id.history_button);
 
         userNameText.setText(sharedPreferences.getString("username", ""));
+
+        String time = GeneralUtils.checkTime();
+        Log.i(TAG, "time:" + time);
+        if ("morning".equals(time)) {
+            welcomeBackText.setText("Good morning !");
+        } else if ("afternoon".equals(time)) {
+            welcomeBackText.setText("Good afternoon !");
+        } else if ("evening".equals(time)) {
+            welcomeBackText.setText("Good evening !");
+        } else if ("night".equals(time)) {
+            welcomeBackText.setText("Good night !");
+        } else {
+            welcomeBackText.setText("Hello !");
+        }
+
 
         account.setOnClickListener(new View.OnClickListener() {
             @Override

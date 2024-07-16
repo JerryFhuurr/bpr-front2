@@ -37,10 +37,23 @@
                 android:layout_height="54dp"
                 android:layout_marginStart="20dp"
                 android:text="Loading..."
-                android:textSize="20dp"
+                android:textSize="30sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/user_userIcon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/welcome_back_label"
+                android:layout_width="192dp"
+                android:layout_height="46dp"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/user_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.19"
+                app:layout_constraintStart_toEndOf="@+id/user_userIcon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.695" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
