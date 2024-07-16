@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,7 @@ public class UploadResFragment extends Fragment {
     private EditText fileTitleEdit;
     private EditText dscEdit;
     private TextView videoTitleText;
-    private TextView fileTitleText;
+    private TextView fileTitleText, textSizeLabel;
     private Spinner courseListSpinner;
     private Button chooseVideoButton;
     private Button chooseFileButton;
@@ -93,11 +95,43 @@ public class UploadResFragment extends Fragment {
         chooseFileButton = v.findViewById(R.id.choose_file_button);
         videoTitleText = v.findViewById(R.id.video_title);
         fileTitleText = v.findViewById(R.id.file_title);
+        textSizeLabel = v.findViewById(R.id.text_size_label_desc);
 
         Log.i(TAG, "file:" + filesUpload.size());
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("user", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "");
         getCourseList(username);
+
+        dscEdit.addTextChangedListener(new TextWatcher() {
+            private CharSequence wordNum; // number of words
+            private int selectionStart;
+            private int selectionEnd;
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                wordNum = charSequence; // record number of word
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int number = 200 - editable.length();
+                //TextView显示剩余字数
+                textSizeLabel.setText(number + " words left");
+                selectionStart = dscEdit.getSelectionStart();
+                selectionEnd = dscEdit.getSelectionEnd();
+                if (wordNum.length() > 200) {
+                    textSizeLabel.setText(editable.length() + "/200 words");
+                    textSizeLabel.setTextColor(getResources().getColor(R.color.red));
+                    uploadButton.setText("Too much words entered !!");
+                    uploadButton.setClickable(false);
+                }
+            }
+        });
 
         // open system file to choose file
         chooseVideoButton.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +176,7 @@ public class UploadResFragment extends Fragment {
     }
 
     String path;
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -174,13 +209,13 @@ public class UploadResFragment extends Fragment {
 
     private void checkFileList(int code) {
         if (code == 1) {
-            for (File f: filesUpload) {
+            for (File f : filesUpload) {
                 if (f.getName().endsWith(".mp4") || f.getName().endsWith(".mp4")) {
                     filesUpload.remove(f);
                 }
             }
         } else if (code == 2) {
-            for (File f: filesUpload) {
+            for (File f : filesUpload) {
                 if (f.getName().endsWith(".mp4") || f.getName().endsWith(".mp4")) {
                     continue;
                 } else filesUpload.remove(f);
@@ -290,7 +325,7 @@ public class UploadResFragment extends Fragment {
                             .addFormDataPart("videoDescription", videoDescription)
                             .addFormDataPart("files", filesUpload.get(0).getName(),
                                     RequestBody.create(MediaType.parse("application/octet-stream")
-                                    , filesUpload.get(0)))
+                                            , filesUpload.get(0)))
                             .build();
 
                 } else {

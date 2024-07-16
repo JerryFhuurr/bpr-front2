@@ -135,6 +135,7 @@
     <string name="upload_waiting_label">Uploading, please wait…</string>
     <string name="upload_edit">Edit</string>
     <string name="upload_delete">Remove</string>
+    <string name="uploads_list_title">My uploads</string>
 
     <!-- pop menu -->
     <string name="pop_save">Save image</string>
