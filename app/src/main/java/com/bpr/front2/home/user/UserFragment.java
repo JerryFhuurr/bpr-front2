@@ -26,9 +26,7 @@ public class UserFragment extends Fragment {
 
     private TextView userNameText, welcomeBackText;
     private Button account;
-    private Button about;
     private Button history;
-    private Button cache;
     private Button settings;
     private ImageView iconView;
     private SharedPreferences sharedPreferences;
@@ -53,7 +51,6 @@ public class UserFragment extends Fragment {
 
         welcomeBackText = v.findViewById(R.id.welcome_back_label);
         account = v.findViewById(R.id.user_account);
-        about = v.findViewById(R.id.user_about);
         settings = v.findViewById(R.id.user_settings);
         userNameText = v.findViewById(R.id.user_name);
         history = v.findViewById(R.id.history_button);
@@ -82,17 +79,17 @@ public class UserFragment extends Fragment {
             }
         });
 
-        about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(UserFragment.this).navigate(R.id.action_userFragment_to_aboutFragment);
-            }
-        });
-
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(UserFragment.this).navigate(R.id.action_userFragment_to_historyFragment);
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(UserFragment.this).navigate(R.id.action_userFragment_to_settingsFragment);
             }
         });
 

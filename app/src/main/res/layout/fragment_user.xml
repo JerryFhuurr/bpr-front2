@@ -97,16 +97,6 @@
                     android:drawableLeft="@drawable/settings_icon"
                     android:drawableRight="@drawable/next_icon" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp" />
-
-                <Button
-                    android:id="@+id/user_about"
-                    style="@style/user_button_style"
-                    android:text="@string/user_item2"
-                    android:drawableLeft="@drawable/about_icon"
-                    android:drawableRight="@drawable/next_icon" />
 
                 <View
                     android:layout_width="match_parent"

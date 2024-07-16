@@ -384,6 +384,7 @@ public class UploadResFragment extends Fragment {
                     filesUpload.clear();
                     NavHostFragment.findNavController(UploadResFragment.this)
                             .navigate(R.id.action_uploadResFragment_to_teacherFragment);
+                    // TODO 考虑是否添加通知
                 } else {
                     Toast.makeText(requireContext(), response, Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Unexpected code " + response);
