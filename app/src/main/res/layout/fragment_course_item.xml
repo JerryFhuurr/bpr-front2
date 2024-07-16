@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="80dp"
+    android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:layout_marginVertical="5dp"
+    android:layout_marginVertical="20dp"
+    android:layout_marginHorizontal="15dp"
     android:background="@color/cardview_shadow_start_color"
     android:orientation="vertical"
     tools:context=".home.user.course.CourseItemFragment">
@@ -12,6 +13,7 @@
         android:id="@+id/course_item_title"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"/>
+        android:textSize="35sp"
+        android:layout_margin="10dp" />
 
 </LinearLayout>

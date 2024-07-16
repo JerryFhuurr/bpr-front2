@@ -152,7 +152,7 @@ public class HomeFragment extends Fragment {
 
     private void setRecyclerLayout(String usernameGet) {
         adapter = new CourseAdapter(items);
-        layoutManager = new GridLayoutManager(getContext(), 4);
+        layoutManager = new GridLayoutManager(getContext(), 2);
         courseR.setLayoutManager(layoutManager);
         courseR.setAdapter(adapter);
 

@@ -51,13 +51,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         }
     }
 
-    public void addItem(ArrayList<CourseItem> list){
-        list.addAll(items);
-        items.clear();
-        items.addAll(list);
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemCount() {
         return items.size();

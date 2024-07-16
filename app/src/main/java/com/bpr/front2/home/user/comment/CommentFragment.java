@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -205,6 +206,11 @@ public class CommentFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         commentR.setLayoutManager(layoutManager);
         commentR.setAdapter(adapter);
+
+        DividerItemDecoration mDivider = new
+                DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL);
+        commentR.addItemDecoration(mDivider);
+
 
         // 下拉刷新
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
