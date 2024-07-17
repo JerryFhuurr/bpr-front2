@@ -4,11 +4,13 @@ import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.helper.widget.MotionEffect;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,11 +23,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
+import com.bpr.front2.handler.OnDownloadListener;
 import com.bpr.front2.home.user.teacher.uploads.UploadItem;
 import com.bpr.front2.home.user.teacher.uploads.UploadItemVideoModel;
 import com.bpr.front2.login.LoginActivity;
@@ -55,7 +59,8 @@ public class ResDetailFragment extends Fragment {
     private TextView rateText;
     private EditText descText;
     private TextView videoNameText;
-    private TextView fileNameText;
+    private TextView fileNameText, fileDownloadLabel;
+    private ProgressBar downloadBar;
     private Button playVideoButton;
     private Button downloadFileButton;
     private Button editButton;
@@ -93,6 +98,8 @@ public class ResDetailFragment extends Fragment {
         editButton = v.findViewById(R.id.edit_title_button);
         removeButton = v.findViewById(R.id.delete_video_button);
         commentButton = v.findViewById(R.id.go_to_comments);
+        downloadBar = v.findViewById(R.id.file_download_bar);
+        fileDownloadLabel = v.findViewById(R.id.file_download_progress_label);
 
         titleText.setInputType(EditorInfo.TYPE_NULL);
         descText.setInputType(EditorInfo.TYPE_NULL);
@@ -108,7 +115,23 @@ public class ResDetailFragment extends Fragment {
         downloadFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadFile();
+                downloadFile(new OnDownloadListener() {
+                    @Override
+                    public void onDownloadSuccess() {
+                        fileDownloadLabel.setText(R.string.download_ok);
+                    }
+
+                    @Override
+                    public void onDownloading(int progress) {
+                        fileDownloadLabel.setText(progress + "%");
+                        downloadBar.setProgress(progress);
+                    }
+
+                    @Override
+                    public void onDownloadFailed() {
+                        fileDownloadLabel.setText(R.string.download_fail);
+                    }
+                });
             }
         });
 
@@ -127,7 +150,7 @@ public class ResDetailFragment extends Fragment {
                 descText.setInputType(EditorInfo.TYPE_CLASS_TEXT);
 
                 removeButton.setVisibility(View.GONE);
-                editButton.setText("Apply changes");
+                editButton.setText(R.string.edit_detail_apply_button);
 
                 editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -233,8 +256,10 @@ public class ResDetailFragment extends Fragment {
         if (!uploadItem.fileUrl.equals("null")) {
             fileNameText.setText(uploadItem.fileName);
         } else {
-            fileNameText.setText("No file");
+            fileNameText.setText(R.string.file_not_found);
             downloadFileButton.setVisibility(View.GONE);
+            downloadBar.setVisibility(View.GONE);
+            fileDownloadLabel.setVisibility(View.GONE);
         }
 
         SharedPreferences s = requireActivity().getSharedPreferences("user",MODE_PRIVATE);
@@ -242,7 +267,7 @@ public class ResDetailFragment extends Fragment {
         addHistory(id);
     }
 
-    private void downloadFile() {
+    private void downloadFile(final OnDownloadListener listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -264,24 +289,29 @@ public class ResDetailFragment extends Fragment {
                         final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download",
                                 uploadItem.fileName);
                         Log.i(TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
-                        // TODO add download progress
+
+                        byte[] buf = new byte[2048];
                         if (!file.exists()) {
+                            long total = uploadItemVideoModel.getUploadItem().fileSize;
+                            Log.i(ContentValues.TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
                             FileOutputStream outputStream = new FileOutputStream(file);
                             int len = 0;
-                            byte[] bytes = new byte[1024 * 10];
-                            while ((len = inputStream.read(bytes)) != -1) {
-                                outputStream.write(bytes, 0, len);
+                            long sum = 0;
+                            while ((len = inputStream.read(buf)) != -1) {
+                                outputStream.write(buf, 0, len);
+                                sum += len;
+                                int progress = (int) (sum * 1.0f / total * 100);
+                                // 下载中
+                                listener.onDownloading(progress);
+                                Log.i(MotionEffect.TAG, "progress:" + progress + ",sum=" + sum + ",total=" + total);
                             }
+                            outputStream.flush();
+                            // 下载完成
+                            listener.onDownloadSuccess();
+                            Log.i(MotionEffect.TAG, "file write ok");
                             inputStream.close();
                             outputStream.close();
                         }
-
-                        requireActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getContext(), "Download OK", Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
 
                 });

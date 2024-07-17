@@ -149,6 +149,10 @@
     <string name="comment_hint">Write comment here :-)</string>
     <string name="comment_button">Post comment</string>
     <string name="player_title">Player</string>
+    <string name="download_fail">Cannot download file!</string>
+    <string name="download_ok">Download finished!</string>
+    <string name="edit_detail_apply_button">Apply changes</string>
+    <string name="file_not_found">No file uploaded</string>
 
     <!-- admin -->
     <string name="add_account_label">Add account</string>

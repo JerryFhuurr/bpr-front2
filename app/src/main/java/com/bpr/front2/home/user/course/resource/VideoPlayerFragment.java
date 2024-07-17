@@ -115,7 +115,7 @@ public class VideoPlayerFragment extends Fragment {
                 downloadVideo(1, new OnDownloadListener() {
                     @Override
                     public void onDownloadSuccess() {
-                        downloadProgress.setText("Download finished !");
+                        downloadProgress.setText(R.string.download_ok);
                     }
 
                     @Override
@@ -126,7 +126,7 @@ public class VideoPlayerFragment extends Fragment {
 
                     @Override
                     public void onDownloadFailed() {
-                        downloadProgress.setText("Cannot download file!");
+                        downloadProgress.setText(R.string.download_fail);
                     }
                 });
             }
