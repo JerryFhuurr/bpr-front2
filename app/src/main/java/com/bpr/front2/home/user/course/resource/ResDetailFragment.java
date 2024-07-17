@@ -214,6 +214,8 @@ public class ResDetailFragment extends Fragment {
                     uploadItem.fileName = o.getString("fileName");
                     uploadItem.videoFileDownload = o.getString("videoFileDownload");
                     uploadItem.fileNameDownload = o.getString("fileNameDownload");
+                    uploadItem.videoSize = o.getLong("videoSize");
+                    uploadItem.fileSize = o.getLong("fileSize");
                     uploadItemVideoModel.setUploadItem(uploadItem);
                     setTextView();
                 } catch (JSONException e) {
@@ -262,6 +264,7 @@ public class ResDetailFragment extends Fragment {
                         final File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download",
                                 uploadItem.fileName);
                         Log.i(TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
+                        // TODO add download progress
                         if (!file.exists()) {
                             FileOutputStream outputStream = new FileOutputStream(file);
                             int len = 0;

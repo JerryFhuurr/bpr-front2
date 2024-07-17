@@ -1,7 +1,8 @@
 package com.bpr.front2.home.user.teacher.uploads;
 
+import androidx.annotation.NonNull;
+
 public class UploadItem {
-    //TODO 等后端完成后修改
     public int videoId;
     public String videoTitle;
     public int courseId;
@@ -15,23 +16,12 @@ public class UploadItem {
     public String fileName;
     public String videoFileDownload;
     public String fileNameDownload;
+    public long videoSize;
+    public long fileSize;
 
+    @NonNull
     @Override
     public String toString() {
-        return "UploadItem{" +
-                "videoId=" + videoId +
-                ", videoTitle='" + videoTitle + '\'' +
-                ", courseId=" + courseId +
-                ", userId=" + userId +
-                ", roleId=" + roleId +
-                ", videoScore=" + videoScore +
-                ", videoDescription='" + videoDescription + '\'' +
-                ", videoPath='" + videoPath + '\'' +
-                ", fileUrl='" + fileUrl + '\'' +
-                ", videoFileName='" + videoFileName + '\'' +
-                ", fileName='" + fileName + '\'' +
-                ", videoFileDownload='" + videoFileDownload + '\'' +
-                ", fileNameDownload='" + fileNameDownload + '\'' +
-                '}';
+        return super.toString();
     }
 }

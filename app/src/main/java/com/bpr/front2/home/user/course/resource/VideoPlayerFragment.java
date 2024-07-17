@@ -30,12 +30,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bpr.front2.MainActivity;
 import com.bpr.front2.R;
+import com.bpr.front2.handler.OnDownloadListener;
 import com.bpr.front2.home.user.teacher.uploads.UploadItemVideoModel;
 
 import java.io.File;
@@ -51,8 +53,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class VideoPlayerFragment extends Fragment {
-    private TextView titleLabel;
+    private TextView titleLabel, downloadProgress;
     private TextView warningLabel;
+    private ProgressBar downloadBar;
     private VideoView videoView;
     private Button downloadButton;
     private UploadItemVideoModel uploadItemVideoModel;
@@ -78,9 +81,29 @@ public class VideoPlayerFragment extends Fragment {
         videoView = v.findViewById(R.id.detail_video_view);
         downloadButton = v.findViewById(R.id.download_video_button);
         warningLabel = v.findViewById(R.id.warning_label);
+        downloadBar = v.findViewById(R.id.video_download_bar);
+        downloadProgress = v.findViewById(R.id.video_download_progress_label);
 
         if (!checkFile()) {
-            downloadVideo(2);
+            downloadVideo(2, new OnDownloadListener() {
+                @Override
+                public void onDownloadSuccess() {
+                    downloadProgress.setVisibility(View.GONE);
+                    setUpPlayer();
+                    Thread.currentThread().interrupt();
+                }
+
+                @Override
+                public void onDownloading(int progress) {
+                    downloadProgress.setText(progress + "%");
+                    downloadBar.setProgress(progress);
+                }
+
+                @Override
+                public void onDownloadFailed() {
+                    downloadProgress.setText("Cannot download file!");
+                }
+            });
         } else {
             setUpPlayer();
         }
@@ -89,7 +112,23 @@ public class VideoPlayerFragment extends Fragment {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadVideo(1);
+                downloadVideo(1, new OnDownloadListener() {
+                    @Override
+                    public void onDownloadSuccess() {
+                        downloadProgress.setText("Download finished !");
+                    }
+
+                    @Override
+                    public void onDownloading(int progress) {
+                        downloadProgress.setText(progress + "%");
+                        downloadBar.setProgress(progress);
+                    }
+
+                    @Override
+                    public void onDownloadFailed() {
+                        downloadProgress.setText("Cannot download file!");
+                    }
+                });
             }
         });
         return v;
@@ -116,7 +155,7 @@ public class VideoPlayerFragment extends Fragment {
     }
 
 
-    private void downloadVideo(int type) {
+    private void downloadVideo(int type, final OnDownloadListener listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -132,6 +171,7 @@ public class VideoPlayerFragment extends Fragment {
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        listener.onDownloadFailed();
                         e.printStackTrace();
                     }
 
@@ -141,6 +181,7 @@ public class VideoPlayerFragment extends Fragment {
                         createDownloadNotify();
 
                         InputStream inputStream = response.body().byteStream();
+                        byte[] buf = new byte[2048];
                         File file = null;
                         if (type == 1) {
                             file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download",
@@ -150,30 +191,26 @@ public class VideoPlayerFragment extends Fragment {
                             file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo",
                                     uploadItemVideoModel.getUploadItem().videoFileName + ".mp4");
                         }
+                        long total = uploadItemVideoModel.getUploadItem().videoSize;
                         Log.i(ContentValues.TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
                         FileOutputStream outputStream = new FileOutputStream(file);
                         int len = 0;
-                        byte[] bytes = new byte[1024 * 10];
-                        while ((len = inputStream.read(bytes)) != -1) {
-                            outputStream.write(bytes, 0, len);
+                        long sum = 0;
+                        while ((len = inputStream.read(buf)) != -1) {
+                            outputStream.write(buf, 0, len);
+                            sum += len;
+                            int progress = (int) (sum * 1.0f / total * 100);
+                            // 下载中
+                            listener.onDownloading(progress);
+                            Log.i(TAG, "progress:" + progress + ",sum=" + sum + ",total=" + total);
                         }
+                        outputStream.flush();
+                        // 下载完成
+                        listener.onDownloadSuccess();
                         Log.i(TAG, "file write ok");
                         inputStream.close();
                         outputStream.close();
 
-
-                        requireActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (type == 1) {
-                                    Toast.makeText(getContext(), "Download OK", Toast.LENGTH_SHORT).show();
-                                } else if (type == 2) {
-                                    setUpPlayer();
-                                    Thread.currentThread().interrupt();
-                                }
-
-                            }
-                        });
                     }
 
                 });
