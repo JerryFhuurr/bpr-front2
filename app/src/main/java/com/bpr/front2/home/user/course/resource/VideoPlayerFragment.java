@@ -2,10 +2,23 @@ package com.bpr.front2.home.user.course.resource;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bpr.front2.MainActivity;
 import com.bpr.front2.R;
 import com.bpr.front2.home.user.teacher.uploads.UploadItemVideoModel;
 
@@ -28,6 +42,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -105,7 +120,10 @@ public class VideoPlayerFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS)
+                        .readTimeout(3, TimeUnit.SECONDS)
+                        .build();
                 String url = uploadItemVideoModel.getUploadItem().videoFileDownload;
                 Request request = new Request.Builder().url(url).get().build();
                 Call call = client.newCall(request);
@@ -119,13 +137,16 @@ public class VideoPlayerFragment extends Fragment {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
+
+                        createDownloadNotify();
+
                         InputStream inputStream = response.body().byteStream();
                         File file = null;
                         if (type == 1) {
                             file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download",
                                     uploadItemVideoModel.getUploadItem().videoFileName + ".mp4");
                         } else if (type == 2) {
-                            warningLabel.setText("Loading video, please wait...");
+                            warningLabel.setText(R.string.detail_loading);
                             file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo",
                                     uploadItemVideoModel.getUploadItem().videoFileName + ".mp4");
                         }
@@ -159,5 +180,51 @@ public class VideoPlayerFragment extends Fragment {
             }
 
         }).start();
+    }
+
+    private void createDownloadNotify() {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(requireContext());
+
+        // 在 MainActivity 或其他合适的地方创建通知渠道
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            //申请通知权限
+            if (ContextCompat.checkSelfPermission(requireActivity(),
+                    Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+
+            String channelId = "001";   //通知渠道的标识符
+            CharSequence channelName = "Study";    //通知渠道的位置
+            String channelDescription = "Message from Study";    //通知渠道的描述
+
+            //设置通知渠道的级别
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            //创建通知渠道
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, importance);
+            notificationChannel.setDescription(channelDescription);//可以省略
+
+
+            //在系统中注册消息
+            notificationManager.createNotificationChannel(notificationChannel);
+
+            //创建通知
+            Notification notification = new NotificationCompat.Builder(requireActivity(), "001")
+                    .setContentTitle("Download start")    //消息的标题
+                    .setContentText("Staring download, please wait")  //消息的内容
+                    .setWhen(System.currentTimeMillis())    //指定通知被创建的时间
+                    .setSmallIcon(R.drawable.notification_icon)    //通知的小图标
+                    .setLargeIcon(BitmapFactory.decodeResource
+                            (getResources(), R.drawable.notification_icon)) //通知的大图标
+                    .build();
+
+            //显示一个通知
+            if (ContextCompat.checkSelfPermission(requireActivity(),
+                    Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
+            }
+            notificationManager.notify(1, notification);
+        }
     }
 }

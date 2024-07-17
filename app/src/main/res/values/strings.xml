@@ -166,6 +166,7 @@
     <string name="detail_remove_dia_title">Remove this video</string>
     <string name="detail_remove_dia_content">Are you sure to remove this video?
      Everything relates with this video will be removed also (include comments)</string>
+    <string name="detail_loading">Loading video, please wait…</string>
 
     <!-- comment -->
     <string name="comment_upload_ok">Comment send!</string>

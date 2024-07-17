@@ -3,24 +3,30 @@ package com.bpr.front2;
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import android.Manifest;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,7 +38,6 @@ import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -106,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void checkUser() {
-        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("user",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("user", MODE_PRIVATE);
         String usernameGet = sharedPreferences.getString("username", "");
         if (usernameGet.isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.main_login_info, Toast.LENGTH_SHORT).show();
@@ -208,4 +213,5 @@ public class MainActivity extends AppCompatActivity {
             file.mkdir();
         }
     }
+
 }
