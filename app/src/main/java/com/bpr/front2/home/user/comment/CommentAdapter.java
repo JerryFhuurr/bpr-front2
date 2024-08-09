@@ -13,8 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bpr.front2.MainActivity;
 import com.bpr.front2.R;
 import com.bpr.front2.handler.HttpUtils;
 import com.bpr.front2.home.user.course.CourseAdapter;
@@ -32,9 +34,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     private ArrayList<Comment> comments;
     private SharedPreferences s;
+    MainActivity activity;
 
-    public CommentAdapter(ArrayList<Comment> comments) {
+    public CommentAdapter(ArrayList<Comment> comments, MainActivity activity) {
         this.comments = comments;
+        this.activity = activity;
     }
 
     @NonNull
@@ -69,6 +73,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             @Override
             public void onClick(View view) {
                 removeComment(comments.get(position));
+            }
+        });
+
+        holder.senderName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO 添加弹出对话框显示账户信息的对话框的代码
             }
         });
     }

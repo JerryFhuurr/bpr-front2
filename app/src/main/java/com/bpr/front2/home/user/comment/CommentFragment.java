@@ -202,7 +202,7 @@ public class CommentFragment extends Fragment {
     }
 
     private void setRecyclerLayout() {
-        adapter = new CommentAdapter(comments);
+        adapter = new CommentAdapter(comments, getActivity());
         layoutManager = new LinearLayoutManager(getContext());
         commentR.setLayoutManager(layoutManager);
         commentR.setAdapter(adapter);
