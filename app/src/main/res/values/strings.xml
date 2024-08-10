@@ -83,6 +83,7 @@
     <string name="account_save_text">Save changes</string>
     <string name="account_desc_dialog_title">Description</string>
     <string name="account_pass_origin_d">Origin password</string>
+    <string name="account_profile_empty_value">Not provided</string>
 
     <!-- about -->
     <string name="about_author" translatable="false">Author email :</string>
