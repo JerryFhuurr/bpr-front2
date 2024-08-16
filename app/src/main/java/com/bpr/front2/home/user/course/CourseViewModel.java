@@ -29,6 +29,4 @@ public class CourseViewModel extends ViewModel {
     }
 
 
-    //TODO 后端完成后修改
-
 }

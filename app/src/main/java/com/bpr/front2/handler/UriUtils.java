@@ -89,7 +89,7 @@ public class UriUtils {
 
 
     /**
-     * 通过uri  获取文件路径
+     * 通过uri  find file path by uri
      * @param context
      * @param imageUri
      * @return
@@ -149,7 +149,7 @@ public class UriUtils {
         return null;
     }
 
-    //此方法 只能用于4.4以下的版本
+    // only for 4.4
     private static String getRealFilePath(final Context context, final Uri uri) {
         if (null == uri) {
             return null;
@@ -231,7 +231,7 @@ public class UriUtils {
 
 
     /**
-     * Android 10 以上适配 另一种写法
+     * Android 10 above v2
      * @param context
      * @param uri
      * @return
@@ -260,7 +260,7 @@ public class UriUtils {
     }
 
     /**
-     * Android 10 以上适配
+     * Android 10 above
      * @param context
      * @param uri
      * @return
@@ -331,7 +331,7 @@ public class UriUtils {
         return data;
     }
 
-    //删除图库照片
+    // Delete Gallery Photos
     public static boolean deleteImage(Context c, String imgPath) {
         ContentResolver resolver = c.getContentResolver();
         Cursor cursor = MediaStore.Images.Media.query(resolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI,

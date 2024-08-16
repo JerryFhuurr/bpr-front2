@@ -212,20 +212,20 @@ public class CommentFragment extends Fragment {
         commentR.addItemDecoration(mDivider);
 
 
-        // 下拉刷新
+        // drag and refresh
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //刷新动画开始后 回调此方法
+                // This method is called back after the refresh animation starts
 
-                //设置可见
+                // Set Visible
                 refresh.setRefreshing(true);
 
                 getComments(uploadItem.videoId);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //模拟加载时间，设置不可见
+                        // Simulate loading time, setting invisible
                         refresh.setRefreshing(false);
                     }
                 }, 1000);

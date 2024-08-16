@@ -167,7 +167,7 @@ public class VideoPlayerFragment extends Fragment {
                 Request request = new Request.Builder().url(url).get().build();
                 Call call = client.newCall(request);
 
-                //3.发起异步请求
+                // start request
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -200,12 +200,12 @@ public class VideoPlayerFragment extends Fragment {
                             outputStream.write(buf, 0, len);
                             sum += len;
                             int progress = (int) (sum * 1.0f / total * 100);
-                            // 下载中
+                            // downloading
                             listener.onDownloading(progress);
                             Log.i(TAG, "progress:" + progress + ",sum=" + sum + ",total=" + total);
                         }
                         outputStream.flush();
-                        // 下载完成
+                        // download finished
                         listener.onDownloadSuccess();
                         Log.i(TAG, "file write ok");
                         inputStream.close();
@@ -222,41 +222,47 @@ public class VideoPlayerFragment extends Fragment {
     private void createDownloadNotify() {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(requireContext());
 
-        // 在 MainActivity 或其他合适的地方创建通知渠道
+        // Create a notification channel in MainActivity or other appropriate place
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             //申请通知权限
+            // Apply for notification permissions
             if (ContextCompat.checkSelfPermission(requireActivity(),
                     Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);
             }
 
-            String channelId = "001";   //通知渠道的标识符
-            CharSequence channelName = "Study";    //通知渠道的位置
-            String channelDescription = "Message from Study";    //通知渠道的描述
+            String channelId = "001";   //通知渠道的标识符  The identifier of the notification channel
+            CharSequence channelName = "Study";    //通知渠道的位置  Notification channel location
+            String channelDescription = "Message from Study";    //通知渠道的描述  Description of the notification channel
 
             //设置通知渠道的级别
+            // Set the level of notification channel
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
             //创建通知渠道
+            // Create a notification channel
             NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, importance);
             notificationChannel.setDescription(channelDescription);//可以省略
 
 
             //在系统中注册消息
+            // Registering messages in the system
             notificationManager.createNotificationChannel(notificationChannel);
 
             //创建通知
+            /// create notification
             Notification notification = new NotificationCompat.Builder(requireActivity(), "001")
-                    .setContentTitle("Download start")    //消息的标题
-                    .setContentText("Staring download, please wait")  //消息的内容
-                    .setWhen(System.currentTimeMillis())    //指定通知被创建的时间
-                    .setSmallIcon(R.drawable.notification_icon)    //通知的小图标
+                    .setContentTitle("Download start")    //消息的标题 title
+                    .setContentText("Staring download, please wait")  //消息的内容 content
+                    .setWhen(System.currentTimeMillis())    //指定通知被创建的时间  time of creating notification
+                    .setSmallIcon(R.drawable.notification_icon)    //通知的小图标 icon
                     .setLargeIcon(BitmapFactory.decodeResource
-                            (getResources(), R.drawable.notification_icon)) //通知的大图标
+                            (getResources(), R.drawable.notification_icon)) //通知的大图标 big icon
                     .build();
 
             //显示一个通知
+            // display
             if (ContextCompat.checkSelfPermission(requireActivity(),
                     Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 1);

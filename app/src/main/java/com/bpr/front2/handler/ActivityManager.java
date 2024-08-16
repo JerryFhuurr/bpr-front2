@@ -25,7 +25,7 @@ public class ActivityManager extends Application {
         super.onCreate();
     }
 
-    //添加Activity到容器中
+    // add Activity to container
     public void addActivity(Activity activity) {
         activityList.add(activity);
     }
@@ -38,7 +38,7 @@ public class ActivityManager extends Application {
         }
     }
 
-    //遍历所有Activity并finish
+    // loop all Activity and finish
     public void exit() {
         for (Activity activity : activityList) {
             activity.finish();
