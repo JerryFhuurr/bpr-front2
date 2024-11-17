@@ -95,7 +95,7 @@ public class CommentFragment extends Fragment {
 
         wordNumText.setText("200 words left");
 
-        getComments(uploadItem.videoId);
+        getComments(uploadItem.resId);
 
         commentInput.addTextChangedListener(new TextWatcher() {
             private CharSequence wordNum; // number of words
@@ -115,9 +115,9 @@ public class CommentFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 int number = 200 - editable.length();
-                //TextView显示剩余字数
+                // Left words user can input
                 wordNumText.setText(number + " words left");
-                selectionStart=commentInput.getSelectionStart();
+                selectionStart = commentInput.getSelectionStart();
                 selectionEnd = commentInput.getSelectionEnd();
                 if (wordNum.length() > 200) {
                     wordNumText.setText(editable.length() + "/200 words");
@@ -221,7 +221,7 @@ public class CommentFragment extends Fragment {
                 // Set Visible
                 refresh.setRefreshing(true);
 
-                getComments(uploadItem.videoId);
+                getComments(uploadItem.resId);
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -247,7 +247,7 @@ public class CommentFragment extends Fragment {
                 int userId = s.getInt("userId", 0);
                 Map map = new HashMap();
                 map.put("senderId", String.valueOf(userId));
-                map.put("videoId", String.valueOf(uploadItem.videoId));
+                map.put("videoId", String.valueOf(uploadItem.resId));
                 map.put("commentText", commentInput.getText().toString().trim());
                 map.put("commentScore", String.valueOf(ratingBar.getRating()));
                 JSONObject jo = new JSONObject(map);
@@ -267,7 +267,7 @@ public class CommentFragment extends Fragment {
                     if (response.isSuccessful()) {
                         String responseBody = response.body().string();
                         Log.i(TAG, responseBody);
-                        handlePostComment(responseBody, uploadItem.videoId);
+                        handlePostComment(responseBody, uploadItem.resId);
                     }
                 } catch (IOException e) {
                     Log.w(TAG, Objects.requireNonNull(e.getLocalizedMessage()));

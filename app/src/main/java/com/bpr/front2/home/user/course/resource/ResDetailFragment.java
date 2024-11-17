@@ -158,7 +158,7 @@ public class ResDetailFragment extends Fragment {
                         String titleNew = titleText.getText().toString().trim();
                         String descNew = descText.getText().toString().trim();
                         if (titleNew.equals("")) {
-                            titleNew = uploadItem.videoTitle;
+                            titleNew = uploadItem.resTitle;
                         }
                         uploadChange(titleNew, descNew);
                     }
@@ -200,8 +200,8 @@ public class ResDetailFragment extends Fragment {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
-                String url = HttpUtils.baseUrl1 + "/video/get?videoId="
-                        + uploadItemVideoModel.getUploadItem().videoId;
+                String url = HttpUtils.baseUrl1 + "/video/get?resId="
+                        + uploadItemVideoModel.getUploadItem().resId;
                 Request request = new Request.Builder().url(url).get().build();
                 try {
                     Response response = client.newCall(request).execute();
@@ -224,13 +224,13 @@ public class ResDetailFragment extends Fragment {
             public void run() {
                 try {
                     JSONObject o = new JSONObject(response);
-                    uploadItem.videoTitle = o.getString("videoTitle");
-                    uploadItem.videoId = o.getInt("videoId");
+                    uploadItem.resTitle = o.getString("resTitle");
+                    uploadItem.resId = o.getInt("resId");
                     uploadItem.courseId = o.getInt("courseId");
                     uploadItem.userId = o.getInt("userId");
                     uploadItem.roleId = o.getInt("roleId");
-                    uploadItem.videoScore = o.getInt("videoScore");
-                    uploadItem.videoDescription = o.getString("videoDescription");
+                    uploadItem.resScore = o.getInt("resScore");
+                    uploadItem.resDescription = o.getString("resDescription");
                     uploadItem.videoPath = o.getString("videoPath");
                     uploadItem.fileUrl = o.getString("fileUrl");
                     uploadItem.videoFileName = o.getString("videoFileName");
@@ -249,10 +249,10 @@ public class ResDetailFragment extends Fragment {
     }
 
     private void setTextView() {
-        titleText.setText(uploadItem.videoTitle);
-        descText.setText(uploadItem.videoDescription);
+        titleText.setText(uploadItem.resTitle);
+        descText.setText(uploadItem.resDescription);
         videoNameText.setText(uploadItem.videoFileName);
-        rateText.setText(String.valueOf(uploadItem.videoScore));
+        rateText.setText(String.valueOf(uploadItem.resScore));
         if (!uploadItem.fileUrl.equals("null")) {
             fileNameText.setText(uploadItem.fileName);
         } else {
@@ -327,10 +327,10 @@ public class ResDetailFragment extends Fragment {
                 OkHttpClient client = new OkHttpClient();
                 String url = HttpUtils.baseUrl1 + "/video/update/info";
                 RequestBody body = new FormBody.Builder()
-                        .add("videoId", String.valueOf(uploadItem.videoId))
+                        .add("reId", String.valueOf(uploadItem.resId))
                         .add("userId", String.valueOf(uploadItem.userId))
-                        .add("videoTitle", title)
-                        .add("videoDescription", desc)
+                        .add("reTitle", title)
+                        .add("resDescription", desc)
                         .build();
 
                 Request request = new Request.Builder().url(url).put(body).build();
@@ -376,7 +376,7 @@ public class ResDetailFragment extends Fragment {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
-                String path = HttpUtils.baseUrl1 + "/video/remove?videoId=" + uploadItem.videoId;
+                String path = HttpUtils.baseUrl1 + "/video/remove?resId=" + uploadItem.resId;
                 Request request = new Request.Builder().url(path).delete().build();
 
                 try {
@@ -413,7 +413,7 @@ public class ResDetailFragment extends Fragment {
                 Map map = new HashMap();
                 map.put("userId", uploadItem.userId);
                 map.put("courseId", uploadItem.courseId);
-                map.put("videoId", uploadItem.videoId);
+                map.put("resId", uploadItem.resId);
                 map.put("roleId", uploadItem.roleId);
                 map.put("watcherId", watcherId);
                 JSONObject jo = new JSONObject(map);

@@ -3,13 +3,13 @@ package com.bpr.front2.home.user.teacher.uploads;
 import androidx.annotation.NonNull;
 
 public class UploadItem {
-    public int videoId;
-    public String videoTitle;
+    public int resId;
     public int courseId;
     public int userId;
     public int roleId;
-    public float videoScore;
-    public String videoDescription;
+    public float resScore;
+    public String resTitle;
+    public String resDescription;
     public String videoPath;
     public String fileUrl;
     public String videoFileName;

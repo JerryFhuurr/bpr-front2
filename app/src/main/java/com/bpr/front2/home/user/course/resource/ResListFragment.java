@@ -85,20 +85,21 @@ public class ResListFragment extends Fragment {
         courseNameLabel = v.findViewById(R.id.list_course_name);
 
         courseNameLabel.setText(courseItem.getCourseName());
-        uploadsR = v.findViewById(R.id.uploads_recycle);
-        refresh = v.findViewById(R.id.uploads_refresh);
+        uploadsR = v.findViewById(R.id.uploads_recycle_res);
+        refresh = v.findViewById(R.id.uploads_refresh_res);
         searchEdit = v.findViewById(R.id.search_edit);
 
         loadItems();
         return v;
     }
 
+    //HTTP
     private void loadItems() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient().newBuilder()
-                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .connectTimeout(20, TimeUnit.SECONDS)
                         .readTimeout(5, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .build();
@@ -109,7 +110,7 @@ public class ResListFragment extends Fragment {
 
                     if (response.isSuccessful()) {
                         String responseBody = response.body().string();
-                        Log.i(TAG, responseBody);
+                        Log.i(TAG, "res:" + responseBody);
                         setItems(responseBody);
                     }
                 } catch (IOException e) {
@@ -134,8 +135,8 @@ public class ResListFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject o = jsonArray.getJSONObject(i);
                         UploadItem uploadItem = new UploadItem();
-                        uploadItem.videoId = o.getInt("videoId");
-                        uploadItem.videoTitle = o.getString("videoTitle");
+                        uploadItem.resId = o.getInt("resId");
+                        uploadItem.resTitle = o.getString("resTitle");
                         items.add(uploadItem);
                     }
                     Log.i(TAG, String.valueOf(items.size()));
@@ -151,7 +152,7 @@ public class ResListFragment extends Fragment {
         adapter = new UploadsAdapter(items);
         layoutManager = new LinearLayoutManager(getContext());
 
-        uploadsR.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        //uploadsR.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         uploadsR.setLayoutManager(layoutManager);
         uploadsR.setAdapter(adapter);
 

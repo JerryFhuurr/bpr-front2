@@ -72,8 +72,8 @@ public class TeacherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         for (int i = 1; i <= 50; i++) {
             UploadItem item = new UploadItem();
-            item.videoId = i;
-            item.videoTitle = "Title " + i; // 设置标题，你可以根据需要修改
+            item.resId = i;
+            item.resTitle = "Title " + i; // 设置标题，你可以根据需要修改
             items.add(item);
         }
     }
@@ -174,8 +174,8 @@ public class TeacherFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject o = jsonArray.getJSONObject(i);
                         UploadItem item = new UploadItem();
-                        item.videoTitle = o.getString("videoTitle");
-                        item.videoId = o.getInt("videoId");
+                        item.resTitle = o.getString("resTitle");
+                        item.resId = o.getInt("resId");
                         items.add(item);
                     }
                     setRefreshView(userId);
@@ -200,7 +200,7 @@ public class TeacherFragment extends Fragment {
                 uploadItemVideoModel.setUploadItem(uploadItem);
                 NavHostFragment.findNavController(TeacherFragment.this)
                         .navigate(R.id.action_teacherFragment_to_resDetailFragment);
-                Toast.makeText(getContext(), uploadItem.videoTitle, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), uploadItem.resTitle, Toast.LENGTH_SHORT).show();
             }
 
             @Override

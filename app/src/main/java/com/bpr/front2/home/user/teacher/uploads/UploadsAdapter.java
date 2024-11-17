@@ -34,7 +34,7 @@ public class UploadsAdapter extends RecyclerView.Adapter<UploadsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull UploadsAdapter.ViewHolder holder, int position) {
-        holder.mView.setText(items.get(position).videoTitle);
+        holder.mView.setText(items.get(position).resTitle);
 
         if (clickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +49,7 @@ public class UploadsAdapter extends RecyclerView.Adapter<UploadsAdapter.ViewHold
 
     public void searchItem(String text) {
         for (UploadItem ui : items) {
-            if (!ui.videoTitle.contains(text)) {
+            if (!ui.resTitle.contains(text)) {
                 items.remove(ui);
             }
         }

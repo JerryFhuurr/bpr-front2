@@ -32,15 +32,15 @@
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/uploads_refresh"
+        android:id="@+id/uploads_refresh_res"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/uploads_recycle"
+            android:id="@+id/uploads_recycle_res"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:spanCount="1" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

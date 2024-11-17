@@ -309,9 +309,9 @@ public class UploadResFragment extends Fragment {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient().newBuilder()
-                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .connectTimeout(60, TimeUnit.SECONDS)
                         .readTimeout(5, TimeUnit.SECONDS)
-                        .writeTimeout(15, TimeUnit.SECONDS)
+                        .writeTimeout(60, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .build();
                 MultipartBody multipartBody;
