@@ -103,7 +103,7 @@ public class ResListFragment extends Fragment {
                         .readTimeout(5, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .build();
-                String url = HttpUtils.baseUrl1 + "/video/get/list?courseId=" + courseItem.getId();
+                String url = HttpUtils.baseUrl1 + "/res/get/list?courseId=" + courseItem.getId();
                 Request request = new Request.Builder().url(url).get().build();
                 try {
                     Response response = client.newCall(request).execute();

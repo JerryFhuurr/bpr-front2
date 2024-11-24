@@ -147,7 +147,7 @@ public class CommentFragment extends Fragment {
                         .readTimeout(10, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .build();
-                String url = HttpUtils.baseUrl1 + "/comment/get/all?videoId=" + videoId;
+                String url = HttpUtils.baseUrl1 + "/comment/get/all?resId=" + videoId;
                 Request request = new Request.Builder().url(url).get().build();
 
                 try {
@@ -183,7 +183,7 @@ public class CommentFragment extends Fragment {
                         comment.setCommentId(o.getInt("commentId"));
                         comment.setUserId(o.getInt("userId"));
                         comment.setCourseId(o.getInt("courseId"));
-                        comment.setVideoId(o.getInt("videoId"));
+                        comment.setVideoId(o.getInt("resId"));
                         comment.setRoleId(o.getInt("roleId"));
                         comment.setSenderId(o.getInt("senderId"));
                         comment.setSenderName(o.getString("senderName"));
@@ -247,7 +247,7 @@ public class CommentFragment extends Fragment {
                 int userId = s.getInt("userId", 0);
                 Map map = new HashMap();
                 map.put("senderId", String.valueOf(userId));
-                map.put("videoId", String.valueOf(uploadItem.resId));
+                map.put("resId", String.valueOf(uploadItem.resId));
                 map.put("commentText", commentInput.getText().toString().trim());
                 map.put("commentScore", String.valueOf(ratingBar.getRating()));
                 JSONObject jo = new JSONObject(map);

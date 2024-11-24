@@ -200,7 +200,7 @@ public class ResDetailFragment extends Fragment {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
-                String url = HttpUtils.baseUrl1 + "/video/get?resId="
+                String url = HttpUtils.baseUrl1 + "/res/get?resId="
                         + uploadItemVideoModel.getUploadItem().resId;
                 Request request = new Request.Builder().url(url).get().build();
                 try {
@@ -231,14 +231,11 @@ public class ResDetailFragment extends Fragment {
                     uploadItem.roleId = o.getInt("roleId");
                     uploadItem.resScore = o.getInt("resScore");
                     uploadItem.resDescription = o.getString("resDescription");
-                    uploadItem.videoPath = o.getString("videoPath");
                     uploadItem.fileUrl = o.getString("fileUrl");
-                    uploadItem.videoFileName = o.getString("videoFileName");
                     uploadItem.fileName = o.getString("fileName");
-                    uploadItem.videoFileDownload = o.getString("videoFileDownload");
                     uploadItem.fileNameDownload = o.getString("fileNameDownload");
-                    uploadItem.videoSize = o.getLong("videoSize");
                     uploadItem.fileSize = o.getLong("fileSize");
+                    uploadItem.type = o.getString("type");
                     uploadItemVideoModel.setUploadItem(uploadItem);
                     setTextView();
                 } catch (JSONException e) {
@@ -251,7 +248,7 @@ public class ResDetailFragment extends Fragment {
     private void setTextView() {
         titleText.setText(uploadItem.resTitle);
         descText.setText(uploadItem.resDescription);
-        videoNameText.setText(uploadItem.videoFileName);
+        videoNameText.setText("");
         rateText.setText(String.valueOf(uploadItem.resScore));
         if (!uploadItem.fileUrl.equals("null")) {
             fileNameText.setText(uploadItem.fileName);
@@ -325,11 +322,11 @@ public class ResDetailFragment extends Fragment {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
-                String url = HttpUtils.baseUrl1 + "/video/update/info";
+                String url = HttpUtils.baseUrl1 + "/res/update/info";
                 RequestBody body = new FormBody.Builder()
-                        .add("reId", String.valueOf(uploadItem.resId))
+                        .add("resId", String.valueOf(uploadItem.resId))
                         .add("userId", String.valueOf(uploadItem.userId))
-                        .add("reTitle", title)
+                        .add("resTitle", title)
                         .add("resDescription", desc)
                         .build();
 
@@ -376,7 +373,7 @@ public class ResDetailFragment extends Fragment {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
-                String path = HttpUtils.baseUrl1 + "/video/remove?resId=" + uploadItem.resId;
+                String path = HttpUtils.baseUrl1 + "/res/remove?resId=" + uploadItem.resId;
                 Request request = new Request.Builder().url(path).delete().build();
 
                 try {

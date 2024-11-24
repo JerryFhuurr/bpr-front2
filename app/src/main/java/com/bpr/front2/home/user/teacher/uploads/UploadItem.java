@@ -10,14 +10,11 @@ public class UploadItem {
     public float resScore;
     public String resTitle;
     public String resDescription;
-    public String videoPath;
     public String fileUrl;
-    public String videoFileName;
     public String fileName;
-    public String videoFileDownload;
     public String fileNameDownload;
-    public long videoSize;
     public long fileSize;
+    public String type;
 
     @NonNull
     @Override
