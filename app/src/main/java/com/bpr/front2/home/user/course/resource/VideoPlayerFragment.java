@@ -108,7 +108,7 @@ public class VideoPlayerFragment extends Fragment {
             setUpPlayer();
         }
 
-        titleLabel.setText(uploadItemVideoModel.getUploadItem().videoFileName);
+        titleLabel.setText(uploadItemVideoModel.getUploadItem().fileName);
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,7 +137,7 @@ public class VideoPlayerFragment extends Fragment {
 
     private Boolean checkFile() {
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo/"
-                + uploadItemVideoModel.getUploadItem().videoFileName + ".mp4";
+                + uploadItemVideoModel.getUploadItem().fileName + ".mp4";
         File file = new File(path);
         return file.exists();
     }
@@ -146,7 +146,7 @@ public class VideoPlayerFragment extends Fragment {
         Log.i(TAG, "try to set up player");
         Toast.makeText(getContext(), "Laoding complete!", Toast.LENGTH_SHORT).show();
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo/"
-                + uploadItemVideoModel.getUploadItem().videoFileName + ".mp4";
+                + uploadItemVideoModel.getUploadItem().fileName + ".mp4";
         videoView.setVideoPath(path);
         MediaController mediaController = new MediaController(getContext());
         videoView.setMediaController(mediaController);
@@ -163,7 +163,7 @@ public class VideoPlayerFragment extends Fragment {
                         .connectTimeout(3, TimeUnit.SECONDS)
                         .readTimeout(3, TimeUnit.SECONDS)
                         .build();
-                String url = uploadItemVideoModel.getUploadItem().videoFileDownload;
+                String url = uploadItemVideoModel.getUploadItem().fileNameDownload;
                 Request request = new Request.Builder().url(url).get().build();
                 Call call = client.newCall(request);
 
@@ -185,13 +185,13 @@ public class VideoPlayerFragment extends Fragment {
                         File file = null;
                         if (type == 1) {
                             file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download",
-                                    uploadItemVideoModel.getUploadItem().videoFileName + ".mp4");
+                                    uploadItemVideoModel.getUploadItem().fileName + ".mp4");
                         } else if (type == 2) {
                             warningLabel.setText(R.string.detail_loading);
                             file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/tempVideo",
-                                    uploadItemVideoModel.getUploadItem().videoFileName + ".mp4");
+                                    uploadItemVideoModel.getUploadItem().fileName + ".mp4");
                         }
-                        long total = uploadItemVideoModel.getUploadItem().videoSize;
+                        long total = uploadItemVideoModel.getUploadItem().fileSize;
                         Log.i(ContentValues.TAG, Environment.getExternalStorageDirectory().getAbsolutePath());
                         FileOutputStream outputStream = new FileOutputStream(file);
                         int len = 0;

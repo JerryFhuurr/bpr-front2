@@ -62,7 +62,8 @@ public class UploadResFragment extends Fragment {
     private TextView videoTitleText;
     private TextView fileTitleText, textSizeLabel;
     private Spinner courseListSpinner;
-    private Button chooseVideoButton;
+    private Spinner typeListSpinner;
+    private String type = "";
     private Button chooseFileButton;
     private Button uploadButton;
     private static int REQUEST_CODE = 1;
@@ -91,7 +92,7 @@ public class UploadResFragment extends Fragment {
         dscEdit = v.findViewById(R.id.file_desc_edit);
         courseListSpinner = v.findViewById(R.id.course_cat);
         uploadButton = v.findViewById(R.id.upload);
-        chooseVideoButton = v.findViewById(R.id.choose_video_button);
+        typeListSpinner = v.findViewById(R.id.file_type_cat);
         chooseFileButton = v.findViewById(R.id.choose_file_button);
         videoTitleText = v.findViewById(R.id.video_title);
         fileTitleText = v.findViewById(R.id.file_title);
@@ -101,6 +102,19 @@ public class UploadResFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("user", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "");
         getCourseList(username);
+
+        typeListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                type = adapterView.getItemAtPosition(i).toString();
+                Toast.makeText(getContext(), "You choose " + type, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         dscEdit.addTextChangedListener(new TextWatcher() {
             private CharSequence wordNum; // number of words
@@ -130,21 +144,6 @@ public class UploadResFragment extends Fragment {
                     uploadButton.setText("Too much words entered !!");
                     uploadButton.setClickable(false);
                 }
-            }
-        });
-
-        // open system file to choose file
-        chooseVideoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                //chooseFile.setType("*/*");//匹配所有的类型
-                //intent.setType(“image/*”);//选择图片
-                //intent.setType(“audio/*”); //选择音频
-                chooseFile.setType("video/*"); //选择视频 （mp4 3gp 是android支持的视频格式）
-                //intent.setType(“video/*;image/*”);//同时选择视频和图片
-                Intent intent = Intent.createChooser(chooseFile, "title");
-                startActivityForResult(intent, 1);
             }
         });
 
@@ -321,8 +320,9 @@ public class UploadResFragment extends Fragment {
                             .addFormDataPart("userId", String.valueOf(userId))
                             .addFormDataPart("courseId", String.valueOf(courseItem.getId()))
                             .addFormDataPart("roleId", String.valueOf(GeneralUtils.getRoleId(roleName)))
-                            .addFormDataPart("videoTitle", videoTitle)
-                            .addFormDataPart("videoDescription", videoDescription)
+                            .addFormDataPart("title", videoTitle)
+                            .addFormDataPart("description", videoDescription)
+                            .addFormDataPart("type", type)
                             .addFormDataPart("files", filesUpload.get(0).getName(),
                                     RequestBody.create(MediaType.parse("application/octet-stream")
                                             , filesUpload.get(0)))
@@ -334,8 +334,9 @@ public class UploadResFragment extends Fragment {
                             .addFormDataPart("userId", String.valueOf(userId))
                             .addFormDataPart("courseId", String.valueOf(courseItem.getId()))
                             .addFormDataPart("roleId", String.valueOf(GeneralUtils.getRoleId(roleName)))
-                            .addFormDataPart("videoTitle", videoTitle)
-                            .addFormDataPart("videoDescription", videoDescription)
+                            .addFormDataPart("title", videoTitle)
+                            .addFormDataPart("description", videoDescription)
+                            .addFormDataPart("type", type)
                             .addFormDataPart("files", filesUpload.get(0).getName(),
                                     RequestBody.create(MediaType.parse("multipart/form-data")
                                             , filesUpload.get(0)))
@@ -346,7 +347,7 @@ public class UploadResFragment extends Fragment {
                 }
                 Log.i(TAG, "upload:" + filesUpload.size());
                 Log.i(TAG, "upload:" + multipartBody.toString());
-                String path = HttpUtils.baseUrl1 + "/video/upload/";
+                String path = HttpUtils.baseUrl1 + "/res/upload/";
                 Request request = new Request.Builder()
                         .url(path)
                         .post(multipartBody)

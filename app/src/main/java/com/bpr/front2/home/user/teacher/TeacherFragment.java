@@ -142,7 +142,7 @@ public class TeacherFragment extends Fragment {
                         .readTimeout(5, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .build();
-                String url = HttpUtils.baseUrl1 + "/video/get/list/user?userId=" + userId;
+                String url = HttpUtils.baseUrl1 + "/res/get/list/user?userId=" + userId;
                 Request request = new Request.Builder().url(url).get().build();
                 try {
                     Response response = client.newCall(request).execute();

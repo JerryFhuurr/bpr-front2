@@ -130,9 +130,9 @@
     <string name="upload_waiting_dialog_title">Uploading</string>
     <string name="upload_waiting_dialog_message">Please wait</string>
     <string name="upload_delete_file">Remove file</string>
-    <string name="upload_video_label">Upload video</string>
+    <string name="upload_video_label">Choose type</string>
     <string name="upload_video_choose">Choose</string>
-    <string name="upload_file_label">Upload file (Optional)</string>
+    <string name="upload_file_label">Upload file</string>
     <string name="upload_waiting_label">Uploading, please wait…</string>
     <string name="upload_edit">Edit</string>
     <string name="upload_delete">Remove</string>
