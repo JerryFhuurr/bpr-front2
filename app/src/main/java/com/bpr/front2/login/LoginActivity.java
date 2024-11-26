@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameText;
     private EditText passwordText;
     private Button loginButton;
-    private TextView forgetPassword;
     private TextView errorLabel;
     private long exitTime = 0;
 
@@ -59,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.username_login);
         passwordText = findViewById(R.id.password_login);
         loginButton = findViewById(R.id.button_login);
-        forgetPassword = findViewById(R.id.login_forget);
         errorLabel = findViewById(R.id.login_error_label);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -77,21 +75,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        forgetPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder resetPassword = new AlertDialog.Builder(LoginActivity.this);
-                resetPassword.setTitle(R.string.login_reset_title);
-                resetPassword.setMessage(R.string.login_reset_body);
-                resetPassword.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                resetPassword.show();
-            }
-        });
     }
 
 
