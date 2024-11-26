@@ -165,7 +165,7 @@
     <!-- detail page -->
     <string name="detail_video_label">Video</string>
     <string name="detail_video_play_button">Play video</string>
-    <string name="detail_file_label">Other file</string>
+    <string name="detail_file_label">Files</string>
     <string name="detail_file_download_button">Download file</string>
     <string name="detail_video_download">Download video</string>
     <string name="detail_remove_dia_title">Remove this video</string>

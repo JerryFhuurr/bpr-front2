@@ -57,8 +57,8 @@ import okhttp3.Response;
 public class ResDetailFragment extends Fragment {
     private EditText titleText;
     private TextView rateText;
-    private EditText descText;
-    private TextView videoNameText;
+    private EditText descText, typeText;
+    private TextView videoNameText, videoTitleLabel;
     private TextView fileNameText, fileDownloadLabel;
     private ProgressBar downloadBar;
     private Button playVideoButton;
@@ -91,7 +91,9 @@ public class ResDetailFragment extends Fragment {
         titleText = v.findViewById(R.id.res_title_label);
         rateText = v.findViewById(R.id.video_rate_score_label);
         descText = v.findViewById(R.id.res_desc_label);
+        typeText = v.findViewById(R.id.res_type_label);
         videoNameText = v.findViewById(R.id.video_title);
+        videoTitleLabel = v.findViewById(R.id.video_label);
         playVideoButton = v.findViewById(R.id.choose_video_button);
         fileNameText = v.findViewById(R.id.file_title);
         downloadFileButton = v.findViewById(R.id.choose_file_button);
@@ -250,6 +252,14 @@ public class ResDetailFragment extends Fragment {
         descText.setText(uploadItem.resDescription);
         videoNameText.setText("");
         rateText.setText(String.valueOf(uploadItem.resScore));
+        typeText.setText(uploadItem.type);
+
+        if (!uploadItem.type.equals("video")) {
+            videoTitleLabel.setVisibility(View.GONE);
+            videoNameText.setVisibility(View.GONE);
+            playVideoButton.setVisibility(View.GONE);
+        }
+
         if (!uploadItem.fileUrl.equals("null")) {
             fileNameText.setText(uploadItem.fileName);
         } else {
