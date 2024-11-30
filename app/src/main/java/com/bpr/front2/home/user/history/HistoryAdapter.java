@@ -43,8 +43,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.title.setText(histories.get(position).getVideoTitle());
-        holder.upName.setText(histories.get(position).getUpName());
+        holder.title.setText("res id: " + String.valueOf(histories.get(position).getResId()));
+        //holder.upName.setText(histories.get(position).getUpName());
 
         long time = histories.get(position).getWatchTime();
         @SuppressLint("SimpleDateFormat") SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

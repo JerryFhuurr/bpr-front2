@@ -108,13 +108,10 @@ public class HistoryFragment extends Fragment {
                         History history = new History();
                         history.setUserId(o.getInt("userId"));
                         history.setCourseId(o.getInt("courseId"));
-                        history.setVideoId(o.getInt("videoId"));
+                        history.setResId(o.getInt("resId"));
                         history.setRoleId(o.getInt("roleId"));
                         history.setWatcherId(o.getInt("watcherId"));
                         history.setWatchTime(o.getLong("watchTime"));
-                        history.setVideoTitle(o.getString("videoTitle"));
-                        history.setUpName(o.getString("upName"));
-                        history.setHId(o.getInt("hid"));
                         histories.add(history);
                     }
                     Log.i(TAG, String.valueOf(histories.size()));
@@ -152,4 +149,5 @@ public class HistoryFragment extends Fragment {
             }
         });
     }
+
 }

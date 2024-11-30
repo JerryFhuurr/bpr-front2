@@ -85,25 +85,7 @@ public class VideoPlayerFragment extends Fragment {
         downloadProgress = v.findViewById(R.id.video_download_progress_label);
 
         if (!checkFile()) {
-            downloadVideo(2, new OnDownloadListener() {
-                @Override
-                public void onDownloadSuccess() {
-                    downloadProgress.setVisibility(View.GONE);
-                    setUpPlayer();
-                    Thread.currentThread().interrupt();
-                }
 
-                @Override
-                public void onDownloading(int progress) {
-                    downloadProgress.setText(progress + "%");
-                    downloadBar.setProgress(progress);
-                }
-
-                @Override
-                public void onDownloadFailed() {
-                    downloadProgress.setText("Cannot download file!");
-                }
-            });
         } else {
             setUpPlayer();
         }

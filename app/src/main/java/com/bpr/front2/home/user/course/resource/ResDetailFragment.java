@@ -56,7 +56,7 @@ import okhttp3.Response;
 
 public class ResDetailFragment extends Fragment {
     private EditText titleText;
-    private TextView rateText;
+    private TextView rateText, idLabel;
     private EditText descText, typeText;
     private TextView videoNameText, videoTitleLabel;
     private TextView fileNameText, fileDownloadLabel;
@@ -102,6 +102,7 @@ public class ResDetailFragment extends Fragment {
         commentButton = v.findViewById(R.id.go_to_comments);
         downloadBar = v.findViewById(R.id.file_download_bar);
         fileDownloadLabel = v.findViewById(R.id.file_download_progress_label);
+        idLabel = v.findViewById(R.id.video_id_label);
 
         titleText.setInputType(EditorInfo.TYPE_NULL);
         descText.setInputType(EditorInfo.TYPE_NULL);
@@ -253,6 +254,7 @@ public class ResDetailFragment extends Fragment {
         videoNameText.setText("");
         rateText.setText(String.valueOf(uploadItem.resScore));
         typeText.setText(uploadItem.type);
+        idLabel.setText("id: " + String.valueOf(uploadItem.resId));
 
         if (!uploadItem.type.equals("video")) {
             videoTitleLabel.setVisibility(View.GONE);

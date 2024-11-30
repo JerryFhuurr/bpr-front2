@@ -151,11 +151,11 @@ public class UploadResFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                chooseFile.setType("*/*");//匹配所有的类型
-                //intent.setType(“image/*”);//选择图片
-                //intent.setType(“audio/*”); //选择音频
-                //chooseFile.setType("video/*"); //选择视频 （mp4 3gp 是android支持的视频格式）
-                //intent.setType(“video/*;image/*”);//同时选择视频和图片
+                chooseFile.setType("*/*");// all types
+                //intent.setType(“image/*”);// only pics
+                //intent.setType(“audio/*”); // only music
+                //chooseFile.setType("video/*"); // only videos （mp4 3gp 是android支持的视频格式）
+                //intent.setType(“video/*;image/*”);// both video and pic
                 Intent intent = Intent.createChooser(chooseFile, "title");
                 startActivityForResult(intent, 2);
             }
@@ -190,7 +190,7 @@ public class UploadResFragment extends Fragment {
                     Toast.makeText(requireContext(), R.string.e_file_size, Toast.LENGTH_SHORT).show();
                 } else {
                     if (path.endsWith(".mp4") || path.endsWith(".avi")) {
-                        videoTitleText.setText(file.getName());
+                        fileTitleText.setText(file.getName());
                         checkFileList(1);
                     } else {
                         fileTitleText.setText(file.getName());

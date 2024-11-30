@@ -4,12 +4,10 @@ public class History {
     private int hId;
     private int userId;
     private int courseId;
-    private int videoId;
+    private int resId;
     private int roleId;
     private int watcherId;
     private long watchTime;
-    private String upName;
-    private String videoTitle;
 
     public int getHId() {
         return this.hId;
@@ -23,8 +21,8 @@ public class History {
         return this.courseId;
     }
 
-    public int getVideoId() {
-        return this.videoId;
+    public int getResId() {
+        return this.resId;
     }
 
     public int getRoleId() {
@@ -39,22 +37,6 @@ public class History {
         return this.watchTime;
     }
 
-    public String getVideoTitle() {
-        return videoTitle;
-    }
-
-    public String getUpName() {
-        return upName;
-    }
-
-    public void setUpName(String upName) {
-        this.upName = upName;
-    }
-
-    public void setVideoTitle(String videoTitle) {
-        this.videoTitle = videoTitle;
-    }
-
     public void setHId(final int hId) {
         this.hId = hId;
     }
@@ -67,8 +49,8 @@ public class History {
         this.courseId = courseId;
     }
 
-    public void setVideoId(final int videoId) {
-        this.videoId = videoId;
+    public void setResId(final int resId) {
+        this.resId = resId;
     }
 
     public void setRoleId(final int roleId) {
