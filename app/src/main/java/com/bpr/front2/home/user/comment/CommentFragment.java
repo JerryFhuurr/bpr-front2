@@ -147,7 +147,7 @@ public class CommentFragment extends Fragment {
                         .readTimeout(10, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .build();
-                String url = HttpUtils.baseUrl1 + "/comment/get/all?resId=" + videoId;
+                String url = HttpUtils.baseUrl1 + "/comment/get/all?videoId=" + videoId;
                 Request request = new Request.Builder().url(url).get().build();
 
                 try {
@@ -155,7 +155,7 @@ public class CommentFragment extends Fragment {
 
                     if (response.isSuccessful()) {
                         String responseBody = response.body().string();
-                        Log.i(TAG, responseBody);
+                        Log.i(TAG, "comments:" + responseBody);
                         setCommentList(responseBody);
                     }
                 } catch (IOException e) {
@@ -183,9 +183,8 @@ public class CommentFragment extends Fragment {
                         comment.setCommentId(o.getInt("commentId"));
                         comment.setUserId(o.getInt("userId"));
                         comment.setCourseId(o.getInt("courseId"));
-                        comment.setVideoId(o.getInt("resId"));
+                        comment.setResId(o.getInt("resId"));
                         comment.setRoleId(o.getInt("roleId"));
-                        comment.setSenderId(o.getInt("senderId"));
                         comment.setSenderName(o.getString("senderName"));
                         comment.setCommentText(o.getString("commentText"));
                         comment.setCommentTime(o.getLong("commentTime"));

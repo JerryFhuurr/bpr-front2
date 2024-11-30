@@ -4,10 +4,12 @@ import java.sql.Timestamp;
 
 public class Comment {
     private int commentId;
+    // ↓ these are info from video (not sender!!)
     private int userId;
     private int courseId;
-    private int videoId;
+    private int resId;
     private int roleId;
+    // ↑
     private int senderId;
     private String senderName;
     private String commentText;
@@ -24,9 +26,6 @@ public class Comment {
     public int getCourseId() {
         return this.courseId;
     }
-    public int getVideoId() {
-        return this.videoId;
-    }
     public int getRoleId() {
         return this.roleId;
     }
@@ -35,6 +34,10 @@ public class Comment {
     }
     public String getCommentText() {
         return this.commentText;
+    }
+
+    public int getResId() {
+        return resId;
     }
 
     public String getSenderName() {
@@ -56,9 +59,6 @@ public class Comment {
     public void setCourseId(final int courseId) {
         this.courseId = courseId;
     }
-    public void setVideoId(final int videoId) {
-        this.videoId = videoId;
-    }
     public void setRoleId(final int roleId) {
         this.roleId = roleId;
     }
@@ -73,6 +73,10 @@ public class Comment {
     }
     public void setCommentScore(final float commentScore) {
         this.commentScore = commentScore;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
     }
 
     public void setSenderName(String senderName) {
